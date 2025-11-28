@@ -1,25 +1,36 @@
 /* Основные CSS переменные */
 :root {
-    --primary-color: #4F46E5;
-    --primary-light: #6366F1;
-    --primary-lighter: #818CF8;
-    --secondary-color: #F59E0B;
-    --accent-color: #10B981;
-    --bg-light: #F8FAFC;
+    --primary-color: #2a2a2e;
+    --primary-light: #3a3a40;
+    --primary-lighter: #4a4a52;
+    --secondary-color: #FF6B35;
+    --secondary-light: #FF8C61;
+    --accent-color: #FF8C61;
+    --accent-dark: #FF6B35;
+    --bg-light: #1e1e22;
+    --bg-dark: #17171a;
+    --bg-card: #25252b;
     --bg-white: #FFFFFF;
-    --text-dark: #1E293B;
-    --text-gray: #64748B;
-    --border-color: #E2E8F0;
-    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --text-dark: #1a1a1a;
+    --text-light: #e4e4e7;
+    --text-gray: #a1a1aa;
+    --border-color: #3a3a40;
+    --gradient-primary: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%);
+    --gradient-secondary: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    --gradient-accent: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    --gradient-dark-orange: linear-gradient(135deg, #3a3a40 0%, #FF6B35 100%);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-orange: 0 4px 20px rgba(255, 107, 53, 0.4);
+    --shadow-green: 0 4px 20px rgba(255, 107, 53, 0.4);
 }
 
 /* Основные стили */
 body {
     font-family: 'Nunito', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-dark);
+    background-color: #1e1e22;
+    color: #e4e4e7;
 }
 
 /* Анимации */
@@ -74,17 +85,18 @@ body {
 /* Карточки продуктов */
 .product-card {
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: none;
+    border: 1px solid #3a3a40;
     border-radius: 20px;
     overflow: hidden;
-    background: var(--bg-white);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    background: #eaeaec;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     animation: fadeInUp 0.6s ease-out;
 }
 
 .product-card:hover {
     transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 25px 50px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 12px 40px rgba(255, 107, 53, 0.3);
+    border-color: #FF6B35;
 }
 
 .product-card::before {
@@ -94,7 +106,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.829), transparent);
     transition: left 0.5s;
 }
 
@@ -104,7 +116,7 @@ body {
 
 /* Кнопки */
 .btn-primary-custom {
-    background: var(--gradient-1);
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
     border: none;
     border-radius: 12px;
     padding: 12px 28px;
@@ -135,7 +147,7 @@ body {
 
 .btn-primary-custom:hover {
     transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 12px 24px rgba(255, 107, 53, 0.5);
     color: white;
 }
 
@@ -219,13 +231,14 @@ body {
 
 /* Статистика */
 .stat-card {
-    background: var(--bg-white);
+    background: #25252b;
     border-radius: 24px;
     padding: 30px;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 2px solid var(--border-color);
+    border: 1px solid #3a3a40;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .stat-card::before {
@@ -235,7 +248,7 @@ body {
     left: 0;
     width: 100%;
     height: 4px;
-    background: var(--gradient-1);
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
     transform: scaleX(0);
     transition: transform 0.4s ease;
 }
@@ -245,8 +258,8 @@ body {
 }
 
 .stat-card:hover {
-    border-color: var(--primary-light);
-    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15);
+    border-color: #FF6B35;
+    box-shadow: 0 12px 30px rgba(255, 107, 53, 0.3);
     transform: translateY(-5px);
 }
 
@@ -258,24 +271,25 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gradient-1);
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
     margin: 0 auto 20px;
     transition: all 0.4s ease;
     animation: fadeInUp 0.8s ease-out;
+    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
 }
 
 .feature-icon:hover {
     transform: rotate(360deg) scale(1.1);
-    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
 }
 
 /* Фильтры */
 .filter-btn {
     border-radius: 30px;
     padding: 12px 28px;
-    border: 2px solid var(--border-color);
-    background: var(--bg-white);
-    color: var(--text-dark);
+    border: 2px solid #3a3a40;
+    background: #25252b;
+    color: #e4e4e7;
     font-weight: 600;
     transition: all 0.3s ease;
     position: relative;
@@ -290,7 +304,7 @@ body {
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: var(--gradient-1);
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
     transform: translate(-50%, -50%);
     transition: width 0.4s, height 0.4s;
     z-index: 0;
@@ -305,9 +319,9 @@ body {
 .filter-btn:hover,
 .filter-btn.active {
     color: white;
-    border-color: var(--primary-color);
+    border-color: #FF6B35;
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 8px 16px rgba(255, 107, 53, 0.4);
 }
 
 .filter-btn span {
@@ -317,17 +331,14 @@ body {
 
 /* Цены */
 .price-tag {
-    background: var(--gradient-1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #1a1a1a;
     font-weight: 800;
     font-size: 2rem;
 }
 
 /* Placeholder для изображений */
 .product-image-placeholder {
-    background: var(--gradient-3);
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
     height: 250px;
     display: flex;
     align-items: center;
