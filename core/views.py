@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Product
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserProfileForm
 
 
 def index(request):
@@ -68,3 +69,18 @@ def logout_view(request):
     logout(request)
     messages.info(request, "Вы вышли из системы.")
     return redirect("core:index")
+
+
+@login_required
+def profile_view(request):
+    """Профиль пользователя"""
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Ваш профиль успешно обновлен!")
+            return redirect("core:profile")
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    return render(request, "core/profile.html", {"form": form})

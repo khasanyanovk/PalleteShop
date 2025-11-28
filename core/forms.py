@@ -95,3 +95,43 @@ class UserRegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class UserProfileForm(forms.ModelForm):
+    """Форма редактирования профиля пользователя"""
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "first_name", "last_name", "phone")
+        widgets = {
+            "username": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;",
+                }
+            ),
+            "first_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;",
+                }
+            ),
+            "last_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "style": "background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;",
+                }
+            ),
+        }
