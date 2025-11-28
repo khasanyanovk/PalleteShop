@@ -32,12 +32,16 @@
             <div class="d-flex align-items-center">
                 <div class="flex-shrink-0">
                     <div class="bg-success bg-opacity-10 p-3 rounded-circle">
-                        <i class="bi bi-check-circle fs-3 text-success"></i>
+                        <i class="bi bi-box-seam fs-3 text-success"></i>
                     </div>
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    <div class="text-muted small">В наличии</div>
-                    <div class="fs-2 fw-bold">{{ in_stock }}</div>
+                    <div class="text-muted small">Активных товаров</div>
+                    <div class="fs-2 fw-bold">{{ in_stock_products }}</div>
+                    <div class="small text-muted mt-1">
+                        <span class="badge" style="background: #2a2a2e; color: #4ade80; border: 1px solid #4ade80;">Новые: {{ new_products }}</span>
+                        <span class="badge ms-1" style="background: #2a2a2e; color: #fbbf24; border: 1px solid #fbbf24;">Б/У: {{ used_products }}</span>
+                    </div>
                 </div>
             </div>
         </div>

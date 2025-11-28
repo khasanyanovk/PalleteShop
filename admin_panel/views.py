@@ -18,6 +18,8 @@ def dashboard(request):
     context = {
         "total_products": Product.objects.count(),
         "in_stock_products": Product.objects.filter(in_stock=True).count(),
+        "new_products": Product.objects.filter(condition="new").count(),
+        "used_products": Product.objects.filter(condition="used").count(),
         "total_users": User.objects.count(),
         "active_users": User.objects.filter(is_active=True).count(),
         "recent_products": Product.objects.all().order_by("-id")[:5],
@@ -158,4 +160,6 @@ def site_settings(request):
     else:
         form = SiteSettingsForm(instance=settings)
 
-    return render(request, "admin_panel/site_settings.html", {"form": form})
+    return render(
+        request, "admin_panel/site_settings.html", {"form": form, "settings": settings}
+    )
