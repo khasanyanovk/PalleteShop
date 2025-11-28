@@ -1,0 +1,128 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Панель управления</h1>
+    <div class="text-muted">
+        <i class="bi bi-person-circle"></i> {{ request.user.username }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                        <i class="bi bi-box-seam fs-3 text-primary"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="text-muted small">Всего продуктов</div>
+                    <div class="fs-2 fw-bold">{{ total_products }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                        <i class="bi bi-check-circle fs-3 text-success"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="text-muted small">В наличии</div>
+                    <div class="fs-2 fw-bold">{{ in_stock }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                        <i class="bi bi-people fs-3 text-info"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="text-muted small">Пользователей</div>
+                    <div class="fs-2 fw-bold">{{ total_users }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Последние продукты</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Цена</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in recent_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price }} ₽</td>
+                                <td>
+                                    {% if product.in_stock %}
+                                        <span class="badge bg-success">В наличии</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Нет в наличии</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-3">Нет продуктов</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Быстрые действия</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'admin_panel:product_add' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Добавить продукт
+                    </a>
+                    <a href="{% url 'admin_panel:product_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-box-seam me-2"></i>Все продукты
+                    </a>
+                    <a href="{% url 'admin_panel:user_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-people me-2"></i>Управление пользователями
+                    </a>
+                    <a href="{% url 'admin_panel:site_settings' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-gear me-2"></i>Настройки сайта
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -18,15 +18,19 @@
                 <ul class="list-unstyled" style="color: rgba(228, 228, 231, 0.7);">
                     <li class="mb-2">
                         <i class="bi bi-telephone me-2" style="color: #FF6B35;"></i>
-                        <a href="tel:+7XXXXXXXXXX" style="color: rgba(228, 228, 231, 0.7); text-decoration: none;">+7 (987) 751-81-81</a>
+                        <a href="tel:{{ site_settings.phone }}" style="color: rgba(228, 228, 231, 0.7); text-decoration: none;">{{ site_settings.phone }}</a>
                     </li>
                     <li class="mb-2">
                         <i class="bi bi-envelope me-2" style="color: #FF6B35;"></i>
-                        <a href="mailto:info@palleteshop.ru" style="color: rgba(228, 228, 231, 0.7); text-decoration: none;">info@palleteshop.ru</a>
+                        <a href="mailto:{{ site_settings.email }}" style="color: rgba(228, 228, 231, 0.7); text-decoration: none;">{{ site_settings.email }}</a>
                     </li>
                     <li class="mb-2">
                         <i class="bi bi-geo-alt me-2" style="color: #FF6B35;"></i>
-                        <a href="https://yandex.ru/maps/-/CLcEj48N" style="color: rgba(228, 228, 231, 0.7); text-decoration: none;">Нижний Новгород, ул. Аркадия Гайдара, 54А</a>
+                        {% if site_settings.address_link %}
+                        <a href="{{ site_settings.address_link }}" target="_blank" style="color: rgba(228, 228, 231, 0.7); text-decoration: none;">{{ site_settings.address }}</a>
+                        {% else %}
+                        {{ site_settings.address }}
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -34,9 +38,9 @@
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3" style="color: #FF6B35;">Режим работы</h5>
                 <ul class="list-unstyled" style="color: rgba(228, 228, 231, 0.7);">
-                    <li class="mb-2">Пн-Пт: 9:00 - 18:00</li>
-                    <li class="mb-2">Сб: 10:00 - 16:00</li>
-                    <li class="mb-2">Вс: Выходной</li>
+                    <li class="mb-2">Пн-Пт: {{ site_settings.working_hours_weekdays }}</li>
+                    <li class="mb-2">Сб: {{ site_settings.working_hours_saturday }}</li>
+                    <li class="mb-2">Вс: {{ site_settings.working_hours_sunday }}</li>
                 </ul>
             </div>
         </div>

@@ -1,0 +1,142 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} продукт{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{% if form.instance.pk %}Редактировать{% else %}Добавить{% endif %} продукт</h1>
+    <a href="{% url 'admin_panel:product_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Назад
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">{{ form.name.label }}</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.condition.label }}</label>
+                            {{ form.condition }}
+                            {% if form.condition.errors %}
+                                <div class="text-danger small mt-1">{{ form.condition.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.price.label }}</label>
+                            {{ form.price }}
+                            {% if form.price.errors %}
+                                <div class="text-danger small mt-1">{{ form.price.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.length.label }}</label>
+                            {{ form.length }}
+                            {% if form.length.errors %}
+                                <div class="text-danger small mt-1">{{ form.length.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.width.label }}</label>
+                            {{ form.width }}
+                            {% if form.width.errors %}
+                                <div class="text-danger small mt-1">{{ form.width.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.wood_type.label }}</label>
+                            {{ form.wood_type }}
+                            {% if form.wood_type.errors %}
+                                <div class="text-danger small mt-1">{{ form.wood_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.load_capacity.label }}</label>
+                            {{ form.load_capacity }}
+                            {% if form.load_capacity.errors %}
+                                <div class="text-danger small mt-1">{{ form.load_capacity.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.quantity.label }}</label>
+                            {{ form.quantity }}
+                            {% if form.quantity.errors %}
+                                <div class="text-danger small mt-1">{{ form.quantity.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-check mt-4">
+                                {{ form.in_stock }}
+                                <label class="form-check-label" for="{{ form.in_stock.id_for_label }}">
+                                    {{ form.in_stock.label }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Изображения</label>
+                            <input type="file" name="images" class="form-control" multiple accept="image/*">
+                            <div class="form-text">Выберите одно или несколько изображений</div>
+                        </div>
+
+                        {% if form.instance.pk and form.instance.images.all %}
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Текущие изображения</label>
+                            <div class="row g-2">
+                                {% for image in form.instance.images.all %}
+                                <div class="col-md-3">
+                                    <img src="{{ image.image.url }}" alt="{{ form.instance.name }}" class="img-fluid rounded">
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Сохранить
+                        </button>
+                        <a href="{% url 'admin_panel:product_list' %}" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0">Подсказки</h6>
+            </div>
+            <div class="card-body">
+                <ul class="small mb-0">
+                    <li class="mb-2">Заполните все обязательные поля</li>
+                    <li class="mb-2">Размеры указываются в сантиметрах</li>
+                    <li class="mb-2">Грузоподъемность в килограммах</li>
+                    <li class="mb-2">Можно загрузить несколько изображений</li>
+                    <li>Первое изображение будет использоваться как главное</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

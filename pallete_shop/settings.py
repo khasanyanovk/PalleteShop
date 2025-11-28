@@ -47,6 +47,7 @@ ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 # Application definition
 
 INSTALLED_APPS = [
+    "admin_panel",
     "core",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -78,6 +79,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "admin_panel.context_processors.site_settings",
             ],
         },
     },
@@ -150,3 +152,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom User Model
 AUTH_USER_MODEL = "core.User"
+
+# Login URL для редиректа при требовании аутентификации
+LOGIN_URL = "login"

@@ -231,14 +231,14 @@ body {
 
 /* Статистика */
 .stat-card {
-    background: #25252b;
+    background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%);
     border-radius: 24px;
     padding: 30px;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 1px solid #3a3a40;
+    border: 1px solid #FF6B35;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
 }
 
 .stat-card::before {
@@ -271,7 +271,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%);
+    border: 2px solid #FF6B35;
     margin: 0 auto 20px;
     transition: all 0.4s ease;
     animation: fadeInUp 0.8s ease-out;
@@ -280,6 +281,8 @@ body {
 
 .feature-icon:hover {
     transform: rotate(360deg) scale(1.1);
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    border-color: #FF8C61;
     box-shadow: 0 10px 25px rgba(255, 107, 53, 0.5);
 }
 
@@ -529,28 +532,33 @@ body {
 
 /* Статистика */
 .stat-card {
-    background: var(--bg-white);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%);
+    border-radius: 24px;
     padding: 30px;
-    transition: all 0.3s ease;
-    border: 2px solid var(--border-color);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid #FF6B35;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
 }
 
 .stat-card:hover {
-    border-color: var(--primary-light);
-    box-shadow: 0 8px 25px rgba(108, 155, 207, 0.1);
+    border-color: #FF6B35;
+    box-shadow: 0 12px 30px rgba(255, 107, 53, 0.3);
+    transform: translateY(-5px);
 }
 
 /* Иконки преимуществ */
 .feature-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--accent-color) 50%);
+    background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%);
+    border: 2px solid #FF6B35;
     margin: 0 auto 20px;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
 }
 
 /* Фильтры */
