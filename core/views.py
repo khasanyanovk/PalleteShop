@@ -94,7 +94,7 @@ def register_view(request):
 def logout_view(request):
     """Выход из системы"""
     logout(request)
-    messages.info(request, "Вы вышли из системы.")
+    messages.success(request, "Вы вышли из системы.")
     return redirect("core:index")
 
 

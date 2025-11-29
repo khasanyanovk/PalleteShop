@@ -123,7 +123,10 @@ class Message(models.Model):
 
     def get_formatted_text(self):
         """Возвращает текст с правильными переносами строк для HTML"""
-        return self.text.replace("\n", "<br>")
+        import html
+
+        safe_text = html.escape(self.text)
+        return safe_text.replace("\n", "<br>")
 
     def save(self, *args, **kwargs):
         is_new = self._state.adding

@@ -73,10 +73,6 @@ function addToBasket(productId, orderBtn) {
             }
 
             updateBasketCount();
-            
-            if (typeof showToast === 'function') {
-                showToast('Товар добавлен в корзину', 'success');
-            }
         } else {
             if (typeof showToast === 'function') {
                 showToast(data.error || 'Ошибка при добавлении товара', 'error');
@@ -116,9 +112,6 @@ function updateQuantity(itemId, quantity, quantityElement) {
     })
     .catch(error => {
         console.error('Error:', error);
-        if (typeof showToast === 'function') {
-            showToast('Произошла ошибка при обновлении количества', 'error');
-        }
     });
 }
 
@@ -141,9 +134,6 @@ function removeFromBasket(itemId, selector) {
             }
             
             updateBasketCount();
-            if (typeof showToast === 'function') {
-                showToast('Товар удален из корзины', 'success');
-            }
         } else {
             if (typeof showToast === 'function') {
                 showToast(data.error || 'Ошибка при удалении товара', 'error');

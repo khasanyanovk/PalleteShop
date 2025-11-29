@@ -16,14 +16,12 @@
 
     {% if basket_items %}
     <div class="row">
-        <!-- Список товаров -->
         <div class="col-lg-8 mb-4">
             <div id="basket-items">
                 {% for item in basket_items %}
                 <div class="card basket-item mb-3" data-item-id="{{ item.id }}" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 12px; overflow: hidden; transition: all 0.3s ease;">
                     <div class="card-body p-3">
                         <div class="row align-items-center">
-                            <!-- Изображение товара -->
                             <div class="col-md-2">
                                 <div class="product-image" style="border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: #1e1e22; display: flex; align-items: center; justify-content: center;">
                                     {% if item.product.images.all %}
@@ -36,7 +34,6 @@
                                 </div>
                             </div>
 
-                            <!-- Информация о товаре -->
                             <div class="col-md-4">
                                 <h5 class="mb-1 fw-bold" style="color: #e4e4e7;">{{ item.product.name }}</h5>
                                 <p class="mb-1" style="color: #a1a1aa; font-size: 0.9rem;">
@@ -52,7 +49,6 @@
                                 </p>
                             </div>
 
-                            <!-- Цена за единицу -->
                             <div class="col-md-2 text-center">
                                 <small style="color: #a1a1aa;">Цена</small>
                                 <div class="fw-bold" style="color: #e4e4e7; font-size: 1.1rem;">
@@ -60,7 +56,6 @@
                                 </div>
                             </div>
 
-                            <!-- Выбор количества -->
                             <div class="col-md-2 text-center">
                                 <small style="color: #a1a1aa;">Количество</small>
                                 <div class="d-flex align-items-center justify-content-center mt-2 quantity-controls">
@@ -91,7 +86,6 @@
             </div>
         </div>
 
-        <!-- Итоговая сумма и оформление -->
         <div class="col-lg-4">
             <div class="card sticky-top" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 12px; top: 100px;">
                 <div class="card-body p-4">
@@ -186,9 +180,7 @@
 </style>
 
 <script>
-    // Обработка изменения количества в корзине
     document.addEventListener('click', function(e) {
-        // Увеличение количества
         const increaseBtn = e.target.closest('.quantity-increase-basket');
         if (increaseBtn) {
             e.preventDefault();
@@ -203,8 +195,7 @@
                 showToast(`Максимальное доступное количество: ${maxQuantity}`, 'warning');
             }
         }
-        
-        // Уменьшение количества
+
         const decreaseBtn = e.target.closest('.quantity-decrease-basket');
         if (decreaseBtn) {
             e.preventDefault();
@@ -220,8 +211,7 @@
                 }
             }
         }
-        
-        // Удаление товара
+
         const removeBtn = e.target.closest('.remove-item');
         if (removeBtn) {
             e.preventDefault();
@@ -232,8 +222,7 @@
             }
         }
     });
-    
-    // Функция обновления количества
+
     function updateBasketItemQuantity(itemId, quantity) {
         fetch(`/basket/update/${itemId}/`, {
             method: 'POST',
@@ -246,20 +235,13 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Обновляем количество
+
                 const itemCard = document.querySelector(`.basket-item[data-item-id="${itemId}"]`);
                 itemCard.querySelector('.quantity-value').textContent = data.quantity;
-                
-                // Обновляем итоговую стоимость товара
                 itemCard.querySelector('.item-total').textContent = data.item_total.toFixed(0) + ' ₽';
-                
-                // Обновляем общую сумму
                 document.getElementById('basket-total').textContent = data.basket_total.toFixed(0) + ' ₽';
-                
-                // Обновляем счетчик в navbar
+
                 updateBasketCount();
-                
-                showToast('Количество обновлено', 'success');
             } else {
                 showToast(data.error || 'Ошибка при обновлении количества', 'error');
             }
@@ -270,7 +252,6 @@
         });
     }
     
-    // Функция удаления товара
     function removeBasketItem(itemId) {
         fetch(`/basket/remove/${itemId}/`, {
             method: 'POST',
@@ -282,7 +263,6 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Удаляем карточку товара с анимацией
                 const itemCard = document.querySelector(`.basket-item[data-item-id="${itemId}"]`);
                 itemCard.style.opacity = '0';
                 itemCard.style.transform = 'translateX(-20px)';
@@ -290,20 +270,16 @@
                 setTimeout(() => {
                     itemCard.remove();
                     
-                    // Обновляем общую сумму
                     document.getElementById('basket-total').textContent = data.basket_total.toFixed(0) + ' ₽';
-                    
-                    // Обновляем счетчик товаров
+
                     const itemsCount = document.querySelectorAll('.basket-item').length;
                     document.getElementById('items-count').textContent = itemsCount;
                     
-                    // Если корзина пуста, перезагружаем страницу
                     if (itemsCount === 0) {
                         location.reload();
                     }
                 }, 300);
                 
-                // Обновляем счетчик в navbar
                 updateBasketCount();
                 
                 showToast('Товар удален из корзины', 'success');
@@ -316,8 +292,7 @@
             showToast('Произошла ошибка при удалении товара', 'error');
         });
     }
-    
-    // Обработчик очистки корзины
+
     document.getElementById('clear-basket-btn')?.addEventListener('click', function() {
         if (!confirm('Вы уверены, что хотите очистить всю корзину?')) {
             return;
@@ -328,8 +303,7 @@
         
         basketItems.forEach((item, index) => {
             const itemId = item.getAttribute('data-item-id');
-            
-            // Удаляем каждый товар с задержкой для красивой анимации
+
             setTimeout(() => {
                 fetch(`/basket/remove/${itemId}/`, {
                     method: 'POST',
@@ -345,8 +319,7 @@
                         item.style.transform = 'translateX(-20px)';
                         
                         removedCount++;
-                        
-                        // Если все товары удалены, перезагружаем страницу
+  
                         if (removedCount === basketItems.length) {
                             setTimeout(() => {
                                 location.reload();

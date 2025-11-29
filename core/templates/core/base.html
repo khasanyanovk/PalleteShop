@@ -62,10 +62,6 @@
             border-left-color: #f59e0b;
         }
         
-        .toast.bg-info {
-            border-left-color: #3b82f6;
-        }
-        
         .toast-body {
             padding: 1rem;
             color: #e4e4e7;
@@ -89,8 +85,6 @@
                             <i class="bi bi-check-circle-fill me-2"></i>
                         {% elif message.tags == 'error' or message.tags == 'danger' %}
                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        {% elif message.tags == 'info' %}
-                            <i class="bi bi-info-circle-fill me-2"></i>
                         {% elif message.tags == 'warning' %}
                             <i class="bi bi-exclamation-circle-fill me-2"></i>
                         {% endif %}

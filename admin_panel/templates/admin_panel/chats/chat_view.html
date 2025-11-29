@@ -135,7 +135,7 @@
             {% if message.is_admin %}
             <div class="message admin-message">
                 <div class="message-bubble">
-                    <div>{{ message.text }}</div>
+                    <div>{{ message.get_formatted_text|safe }}</div>
                     <div class="message-time">
                         Вы • {{ message.created_at|date:"H:i, d.m.Y" }}
                     </div>
@@ -144,7 +144,7 @@
             {% else %}
             <div class="message client-message">
                 <div class="message-bubble">
-                    <div>{{ message.text }}</div>
+                    <div>{{ message.get_formatted_text|safe }}</div>
                     <div class="message-time">
                         {{ chat.get_participant_name }} • {{ message.created_at|date:"H:i, d.m.Y" }}
                     </div>

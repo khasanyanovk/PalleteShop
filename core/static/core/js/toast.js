@@ -7,8 +7,7 @@ function showToast(message, type = 'success') {
         'success': 'bi-check-circle-fill',
         'error': 'bi-exclamation-triangle-fill',
         'danger': 'bi-exclamation-triangle-fill',
-        'warning': 'bi-exclamation-circle-fill',
-        'info': 'bi-info-circle-fill'
+        'warning': 'bi-exclamation-circle-fill'
     };
     
     const toastHtml = `
