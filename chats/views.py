@@ -101,6 +101,16 @@ def chat_view(request, chat_id):
             )
             message.save()
 
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "message_id": str(message.id),
+                        "text": message.text,
+                        "created_at": message.created_at.isoformat(),
+                    }
+                )
+
             if request.headers.get("HX-Request"):
                 return render(
                     request,
@@ -112,7 +122,7 @@ def chat_view(request, chat_id):
     else:
         form = MessageForm()
 
-    messages_list = chat.messages.all().order_by("created_at")
+    messages_list = Message.objects.filter(chat=chat).order_by("created_at")
 
     context = {
         "chat": chat,
@@ -171,6 +181,16 @@ def admin_chat_view(request, chat_id):
             message.is_admin = True
             message.save()
 
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "message_id": str(message.id),
+                        "text": message.text,
+                        "created_at": message.created_at.isoformat(),
+                    }
+                )
+
             if request.headers.get("HX-Request"):
                 return render(
                     request,
@@ -182,7 +202,7 @@ def admin_chat_view(request, chat_id):
     else:
         form = MessageForm()
 
-    messages_list = chat.messages.all().order_by("created_at")
+    messages_list = Message.objects.filter(chat=chat).order_by("created_at")
 
     context = {"chat": chat, "messages": messages_list, "form": form, "is_admin": True}
 
@@ -210,11 +230,11 @@ def get_new_messages(request, chat_id):
     last_message_id = request.GET.get("last_id")
 
     if last_message_id:
-        new_messages = chat.messages.filter(id__gt=last_message_id).order_by(
-            "created_at"
-        )
+        new_messages = Message.objects.filter(
+            chat=chat, id__gt=last_message_id
+        ).order_by("created_at")
     else:
-        new_messages = chat.messages.none()
+        new_messages = Message.objects.none()
 
     is_admin = request.user.is_staff if request.user.is_authenticated else False
 
