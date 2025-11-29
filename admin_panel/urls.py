@@ -19,6 +19,7 @@ urlpatterns = [
         views.user_toggle_active,
         name="user_toggle_active",
     ),
+    path("users/<uuid:pk>/delete/", views.user_delete, name="user_delete"),
     # Настройки сайта
     path("settings/", views.site_settings, name="site_settings"),
     # Чаты

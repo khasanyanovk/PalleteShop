@@ -146,6 +146,29 @@ def user_toggle_active(request, pk):
 
 @login_required
 @user_passes_test(staff_required)
+def user_delete(request, pk):
+    """Удаление пользователя"""
+    user = get_object_or_404(User, pk=pk)
+
+    if user.is_superuser:
+        messages.error(request, "Невозможно удалить суперадминистратора!")
+        return redirect("admin_panel:user_list")
+
+    if user == request.user:
+        messages.error(request, "Вы не можете удалить свой собственный аккаунт!")
+        return redirect("admin_panel:user_list")
+
+    if request.method == "POST":
+        username = user.username
+        user.delete()
+        messages.success(request, f"Пользователь {username} успешно удален!")
+        return redirect("admin_panel:user_list")
+
+    return render(request, "admin_panel/user_confirm_delete.html", {"user": user})
+
+
+@login_required
+@user_passes_test(staff_required)
 def site_settings(request):
     """Настройки сайта (контактная информация)"""
     settings = SiteSettings.get_settings()

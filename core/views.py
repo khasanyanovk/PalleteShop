@@ -1,8 +1,12 @@
+from threading import Thread
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from notifications.email_sender import send_welcome_email
+from pallete_shop import settings
 from .models import Product
 from .forms import UserRegistrationForm, UserProfileForm
 
@@ -84,6 +88,10 @@ def register_view(request):
                 request, f"Аккаунт {username} успешно создан! Теперь вы можете войти."
             )
             login(request, user)
+            Thread(
+                target=send_welcome_email,
+                args=(settings.EMAIL_HOST_USER, user.email, username),
+            ).start()
             return redirect("core:index")
     else:
         form = UserRegistrationForm()
