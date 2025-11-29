@@ -1,8 +1,6 @@
 import uuid
-from typing import TYPE_CHECKING
 from django.db import models
 from django.utils import timezone
-from django.db.models.manager import RelatedManager
 from core.models import User
 
 
@@ -62,9 +60,6 @@ class Chat(models.Model):
     user_unread_count = models.PositiveIntegerField(
         default=0, verbose_name="Непрочитанных у пользователя"
     )
-
-    if TYPE_CHECKING:
-        messages: RelatedManager["Message"]
 
     class Meta:
         verbose_name = "Чат"

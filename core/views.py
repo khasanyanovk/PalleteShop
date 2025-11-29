@@ -26,6 +26,16 @@ def index(request):
     return render(request, "core/index.html", context)
 
 
+def about(request):
+    """Страница О нас"""
+    return render(request, "core/about.html")
+
+
+def contacts(request):
+    """Страница Контакты"""
+    return render(request, "core/contacts.html")
+
+
 def login_view(request):
     """Страница входа с редиректом на админку для staff"""
     if request.method == "POST":

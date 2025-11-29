@@ -85,6 +85,36 @@
                         <div class="form-text">Например: Выходной или 11:00 - 15:00</div>
                     </div>
 
+                    <hr class="my-4">
+                    <h6 class="mb-3">Социальные сети</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.vk_link.label }}</label>
+                        {{ form.vk_link }}
+                        {% if form.vk_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.vk_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Полная ссылка на страницу ВКонтакте (например: https://vk.com/your_page)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.telegram_link.label }}</label>
+                        {{ form.telegram_link }}
+                        {% if form.telegram_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.telegram_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Полная ссылка на Telegram (например: https://t.me/your_channel)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.avito_link.label }}</label>
+                        {{ form.avito_link }}
+                        {% if form.avito_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.avito_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Полная ссылка на профиль на Avito (например: https://www.avito.ru/user/...)</div>
+                    </div>
+
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-circle me-2"></i>Сохранить изменения

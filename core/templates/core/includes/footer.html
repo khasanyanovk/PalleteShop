@@ -13,7 +13,43 @@
                 </p>
             </div>
             
-            <div class="col-md-3 mb-4">
+            <!-- Социальные сети -->
+            {% if site_settings.vk_link or site_settings.telegram_link or site_settings.avito_link %}
+            <div class="col-md-2 mb-4">
+                <h5 class="fw-bold mb-3" style="color: #FF6B35;">Мы в соцсетях</h5>
+                <div class="d-flex gap-2">
+                    {% if site_settings.vk_link %}
+                    <a href="{{ site_settings.vk_link }}" target="_blank" class="social-icon" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(0, 119, 255, 0.1); border: 2px solid #0077FF; border-radius: 50%; color: #0077FF; font-size: 1rem; text-decoration: none; transition: all 0.3s ease;" 
+                       onmouseover="this.style.background='#0077FF'; this.style.color='white'; this.style.transform='scale(1.1) rotate(5deg)';" 
+                       onmouseout="this.style.background='rgba(0, 119, 255, 0.1)'; this.style.color='#0077FF'; this.style.transform='scale(1) rotate(0deg)';">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.785 16.241s.288-.032.436-.193c.136-.148.131-.427.131-.427s-.019-1.303.582-1.495c.593-.189 1.354 1.259 2.162 1.816.612.422 1.076.329 1.076.329l2.163-.03s1.131-.07.595-.963c-.044-.073-.314-.664-1.612-1.878-1.359-1.27-1.177-1.064.46-3.254.998-1.336 1.397-2.15 1.272-2.498-.119-.332-.852-.244-.852-.244l-2.437.015s-.181-.025-.315.056c-.131.079-.215.263-.215.263s-.386 1.03-.9 1.906c-1.084 1.848-1.518 1.947-1.695 1.832-.411-.267-.308-1.073-.308-1.645 0-1.789.27-2.534-.527-2.727-.265-.064-.46-.106-1.137-.113-.869-.009-1.605.003-2.021.207-.277.136-.491.439-.361.456.161.021.525.099.718.363.249.341.24 1.107.24 1.107s.143 2.107-.334 2.369c-.327.18-.776-.187-1.74-1.863-.493-.857-.866-1.804-.866-1.804s-.072-.177-.2-.272c-.155-.115-.372-.151-.372-.151l-2.315.015s-.348.01-.476.162c-.114.135-.009.414-.009.414s1.816 4.25 3.873 6.397c1.885 1.969 4.022 1.839 4.022 1.839h.971z"/>
+                        </svg>
+                    </a>
+                    {% endif %}
+                    {% if site_settings.telegram_link %}
+                    <a href="{{ site_settings.telegram_link }}" target="_blank" class="social-icon" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(96, 165, 250, 0.1); border: 2px solid #60a5fa; border-radius: 50%; color: #60a5fa; font-size: 1.2rem; text-decoration: none; transition: all 0.3s ease;" 
+                       onmouseover="this.style.background='#60a5fa'; this.style.color='white'; this.style.transform='scale(1.1) rotate(-5deg)';" 
+                       onmouseout="this.style.background='rgba(96, 165, 250, 0.1)'; this.style.color='#60a5fa'; this.style.transform='scale(1) rotate(0deg)';">
+                        <i class="bi bi-telegram"></i>
+                    </a>
+                    {% endif %}
+                    {% if site_settings.avito_link %}
+                    <a href="{{ site_settings.avito_link }}" target="_blank" class="social-icon" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(74, 222, 128, 0.1); border: 2px solid #4ade80; border-radius: 50%; color: #4ade80; font-size: 1rem; text-decoration: none; transition: all 0.3s ease;" 
+                       onmouseover="this.style.background='#4ade80'; this.style.color='white'; this.style.transform='scale(1.1) rotate(5deg)';" 
+                       onmouseout="this.style.background='rgba(74, 222, 128, 0.1)'; this.style.color='#4ade80'; this.style.transform='scale(1) rotate(0deg)';">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.7071 4.29289C19.3166 3.90237 18.7834 3.68393 18.2222 3.68393H5.77778C5.21656 3.68393 4.68342 3.90237 4.29289 4.29289C3.90237 4.68342 3.68393 5.21656 3.68393 5.77778V18.2222C3.68393 18.7834 3.90237 19.3166 4.29289 19.7071C4.68342 20.0976 5.21656 20.3161 5.77778 20.3161H18.2222C18.7834 20.3161 19.3166 20.0976 19.7071 19.7071C20.0976 19.3166 20.3161 18.7834 20.3161 18.2222V5.77778C20.3161 5.21656 20.0976 4.68342 19.7071 4.29289Z"/>
+                            <circle cx="9.5" cy="12" r="1.8" fill="#1e1e22"/>
+                            <circle cx="14.5" cy="12" r="1.8" fill="#1e1e22"/>
+                        </svg>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="col-md-2 mb-4">
                 <h5 class="fw-bold mb-3" style="color: #FF6B35;">Контакты</h5>
                 <ul class="list-unstyled" style="color: rgba(228, 228, 231, 0.7);">
                     <li class="mb-2">
@@ -35,7 +71,7 @@
                 </ul>
             </div>
             
-            <div class="col-md-3 mb-4">
+            <div class="col-md-2 mb-4">
                 <h5 class="fw-bold mb-3" style="color: #FF6B35;">Режим работы</h5>
                 <ul class="list-unstyled" style="color: rgba(228, 228, 231, 0.7);">
                     <li class="mb-2">Пн-Пт: {{ site_settings.working_hours_weekdays }}</li>

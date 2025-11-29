@@ -75,6 +75,9 @@ class SiteSettingsForm(forms.ModelForm):
             "working_hours_weekdays",
             "working_hours_saturday",
             "working_hours_sunday",
+            "vk_link",
+            "telegram_link",
+            "avito_link",
         ]
         widgets = {
             "phone": forms.TextInput(attrs={"class": "form-control"}),
@@ -84,4 +87,22 @@ class SiteSettingsForm(forms.ModelForm):
             "working_hours_weekdays": forms.TextInput(attrs={"class": "form-control"}),
             "working_hours_saturday": forms.TextInput(attrs={"class": "form-control"}),
             "working_hours_sunday": forms.TextInput(attrs={"class": "form-control"}),
+            "vk_link": forms.URLInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "https://vk.com/your_page",
+                }
+            ),
+            "telegram_link": forms.URLInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "https://t.me/your_channel",
+                }
+            ),
+            "avito_link": forms.URLInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "https://www.avito.ru/user/...",
+                }
+            ),
         }

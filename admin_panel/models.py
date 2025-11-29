@@ -33,6 +33,26 @@ class SiteSettings(models.Model):
         default="Выходной",
     )
 
+    # Социальные сети
+    vk_link = models.URLField(
+        verbose_name="Ссылка на VK",
+        blank=True,
+        null=True,
+        help_text="Полная ссылка на страницу ВКонтакте",
+    )
+    telegram_link = models.URLField(
+        verbose_name="Ссылка на Telegram",
+        blank=True,
+        null=True,
+        help_text="Полная ссылка на Telegram (например, t.me/username)",
+    )
+    avito_link = models.URLField(
+        verbose_name="Ссылка на Avito",
+        blank=True,
+        null=True,
+        help_text="Полная ссылка на профиль на Avito",
+    )
+
     class Meta:
         verbose_name = "Настройки сайта"
         verbose_name_plural = "Настройки сайта"

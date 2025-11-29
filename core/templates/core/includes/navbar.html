@@ -10,16 +10,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/" style="color: rgba(228, 228, 231, 0.9);">Главная</a>
+                    <a class="nav-link" href="{% url 'core:index' %}" style="color: rgba(228, 228, 231, 0.9);">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#products" style="color: rgba(228, 228, 231, 0.9);">Каталог</a>
+                    <a class="nav-link" href="{% url 'core:index' %}#products" style="color: rgba(228, 228, 231, 0.9);">Каталог</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#about" style="color: rgba(228, 228, 231, 0.9);">О нас</a>
+                    <a class="nav-link" href="{% url 'core:about' %}" style="color: rgba(228, 228, 231, 0.9);">О нас</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#contact" style="color: rgba(228, 228, 231, 0.9);">Контакты</a>
+                    <a class="nav-link" href="{% url 'core:contacts' %}" style="color: rgba(228, 228, 231, 0.9);">Контакты</a>
                 </li>
             </ul>
             {% if user.is_authenticated %}
