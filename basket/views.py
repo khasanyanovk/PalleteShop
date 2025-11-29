@@ -7,6 +7,7 @@ from core.models import Product
 from chats.models import Chat
 from .models import BasketItem
 import json
+from urllib.parse import quote
 
 
 @login_required
@@ -192,4 +193,6 @@ def checkout(request):
 
     basket_items.delete()
 
-    return redirect(f"/chats/{chat.id}/?message={message_text}")
+    encoded_message = quote(message_text)
+
+    return redirect(f"/chats/{chat.id}/?message={encoded_message}")

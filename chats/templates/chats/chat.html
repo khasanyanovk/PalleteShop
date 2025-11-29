@@ -161,7 +161,6 @@
 
 <div class="container py-4">
     <div class="chat-container">
-        <!-- Chat Header -->
         <div class="chat-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -188,7 +187,6 @@
             </div>
         </div>
 
-        <!-- Chat Messages -->
         <div class="chat-messages" id="chatMessages">
             {% for message in messages %}
                 {% if message.is_admin %}
@@ -223,7 +221,6 @@
             {% endfor %}
         </div>
 
-        <!-- Chat Input -->
         <div class="chat-input-area">
             <form method="post" class="chat-input-form" id="chatForm">
                 {% csrf_token %}
@@ -236,51 +233,5 @@
     </div>
 </div>
 
-<script>
-    // Прокрутка к последнему сообщению при загрузке
-    document.addEventListener('DOMContentLoaded', function() {
-        const chatMessages = document.getElementById('chatMessages');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        // Получаем сообщение из URL параметра (если есть)
-        const urlParams = new URLSearchParams(window.location.search);
-        const prefillMessage = urlParams.get('message');
-        
-        // Auto-resize textarea
-        const textarea = document.querySelector('textarea');
-        if (textarea) {
-            // Предзаполняем текст если он есть в URL
-            if (prefillMessage) {
-                textarea.value = decodeURIComponent(prefillMessage);
-                textarea.style.height = 'auto';
-                textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-                // Убираем параметр из URL
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-            
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-            });
-            
-            // Submit on Ctrl+Enter
-            textarea.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.key === 'Enter') {
-                    document.getElementById('chatForm').submit();
-                }
-            });
-        }
-    });
-    
-    // Проверка новых сообщений каждые 3 секунды
-    setInterval(function() {
-        const lastMessage = document.querySelector('.message:last-child');
-        const chatId = '{{ chat.id }}';
-        
-        if (lastMessage) {
-            // Здесь можно добавить AJAX запрос для получения новых сообщений
-            // Пока простая перезагрузка каждые 10 секунд если страница активна
-        }
-    }, 10000);
-</script>
+<script src="{% static 'chats/js/chat.js' %}"></script>
 {% endblock %}

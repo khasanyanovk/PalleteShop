@@ -1,4 +1,5 @@
 {% extends 'admin_panel/chats/base_chat.html' %}
+{% load static %}
 
 {% block title %}Чат с {{ chat.get_participant_name }}{% endblock %}
 
@@ -101,7 +102,6 @@
 </style>
 
 <div class="admin-chat-container">
-    <!-- Header -->
     <div class="admin-chat-header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -130,7 +130,6 @@
         </div>
     </div>
 
-    <!-- Messages -->
     <div class="admin-chat-messages" id="adminChatMessages">
         {% for message in messages %}
             {% if message.is_admin %}
@@ -160,7 +159,6 @@
         {% endfor %}
     </div>
 
-    <!-- Input -->
     <div class="admin-chat-input">
         <form method="post" id="adminChatForm">
             {% csrf_token %}
@@ -174,7 +172,6 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content" style="background: #2a2a2e; color: #e4e4e7;">
@@ -196,18 +193,8 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const chatMessages = document.getElementById('adminChatMessages');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        const textarea = document.querySelector('textarea');
-        if (textarea) {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-            });
-        }
-    });
-</script>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'admin_panel/js/chat_admin.js' %}"></script>
 {% endblock %}
