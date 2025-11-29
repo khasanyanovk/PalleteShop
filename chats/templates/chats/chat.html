@@ -194,7 +194,7 @@
                 {% if message.is_admin %}
                 <div class="message admin-message">
                     <div class="message-bubble">
-                        <div>{{ message.text }}</div>
+                        <div>{{ message.get_formatted_text|safe }}</div>
                         <div class="message-time">
                             {{ message.created_at|date:"H:i, d.m.Y" }}
                         </div>
@@ -203,7 +203,7 @@
                 {% else %}
                 <div class="message user-message">
                     <div class="message-bubble">
-                        <div>{{ message.text }}</div>
+                        <div>{{ message.get_formatted_text|safe }}</div>
                         <div class="message-time">
                             {{ message.created_at|date:"H:i, d.m.Y" }}
                             {% if not message.is_read %}
@@ -242,9 +242,22 @@
         const chatMessages = document.getElementById('chatMessages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
+        // Получаем сообщение из URL параметра (если есть)
+        const urlParams = new URLSearchParams(window.location.search);
+        const prefillMessage = urlParams.get('message');
+        
         // Auto-resize textarea
         const textarea = document.querySelector('textarea');
         if (textarea) {
+            // Предзаполняем текст если он есть в URL
+            if (prefillMessage) {
+                textarea.value = decodeURIComponent(prefillMessage);
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+                // Убираем параметр из URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
             textarea.addEventListener('input', function() {
                 this.style.height = 'auto';
                 this.style.height = Math.min(this.scrollHeight, 120) + 'px';

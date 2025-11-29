@@ -106,10 +106,8 @@ class Message(models.Model):
         Chat, on_delete=models.CASCADE, related_name="messages", verbose_name="Чат"
     )
 
-    # Содержимое
     text = models.TextField(verbose_name="Текст сообщения")
 
-    # Метаданные
     is_admin = models.BooleanField(default=False, verbose_name="От администратора")
     is_read = models.BooleanField(default=False, verbose_name="Прочитано")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата отправки")
@@ -122,6 +120,10 @@ class Message(models.Model):
     def __str__(self):
         sender = "Админ" if self.is_admin else "Пользователь"
         return f"{sender}: {self.text[:50]}"
+
+    def get_formatted_text(self):
+        """Возвращает текст с правильными переносами строк для HTML"""
+        return self.text.replace("\n", "<br>")
 
     def save(self, *args, **kwargs):
         is_new = self._state.adding

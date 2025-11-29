@@ -17,12 +17,29 @@ def index(request):
     elif filter_type == "used":
         products = products.filter(condition="used")
 
+    basket_data = {}
+    if request.user.is_authenticated:
+        from basket.models import BasketItem
+
+        basket_items = BasketItem.objects.filter(user=request.user).select_related(
+            "product"
+        )
+        basket_data = {
+            str(item.product.id): {"item_id": str(item.id), "quantity": item.quantity}
+            for item in basket_items
+        }
+
     if request.headers.get("HX-Request"):
         return render(
-            request, "core/partials/product_list.html", {"products": products}
+            request,
+            "core/partials/product_list.html",
+            {"products": products, "basket_data": basket_data},
         )
 
-    context = {"products": products}
+    context = {
+        "products": products,
+        "basket_data": basket_data,
+    }
     return render(request, "core/index.html", context)
 
 
@@ -66,7 +83,7 @@ def register_view(request):
             messages.success(
                 request, f"Аккаунт {username} успешно создан! Теперь вы можете войти."
             )
-            login(request, user)  # Автоматический вход после регистрации
+            login(request, user)
             return redirect("core:index")
     else:
         form = UserRegistrationForm()

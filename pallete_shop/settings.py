@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "admin_panel",
     "core",
     "chats",
+    "basket",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
