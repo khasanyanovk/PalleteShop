@@ -49,6 +49,7 @@ ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 INSTALLED_APPS = [
     "admin_panel",
     "core",
+    "chats",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -80,6 +81,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "admin_panel.context_processors.site_settings",
+                "chats.context_processors.unread_messages",
             ],
         },
     },

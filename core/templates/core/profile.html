@@ -16,20 +16,6 @@
                         <p style="color: rgba(228, 228, 231, 0.7);">Управление личными данными</p>
                     </div>
 
-                    {% if messages %}
-                        {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {% if message.tags == 'success' %}
-                                <i class="bi bi-check-circle-fill me-2"></i>
-                            {% elif message.tags == 'error' %}
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            {% endif %}
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-
                     <form method="post">
                         {% csrf_token %}
                         
@@ -94,6 +80,23 @@
                                 <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
                             {% endif %}
                             <div class="form-text" style="color: rgba(228, 228, 231, 0.5);">Формат: +7 (XXX) XXX-XX-XX</div>
+                        </div>
+
+                        <hr style="border-color: #3a3a40;" class="my-4">
+
+                        <div class="mb-3">
+                            <h5 style="color: #e4e4e7;"><i class="bi bi-chat-dots me-2"></i>Мои чаты</h5>
+                            <p class="small" style="color: rgba(228, 228, 231, 0.7);">
+                                Общайтесь с нашей поддержкой и отслеживайте свои обращения
+                            </p>
+                            <a href="{% url 'chats:user_chat_list' %}" class="btn w-100 mb-2" style="background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%); color: #e4e4e7; border: 1px solid #FF6B35; border-radius: 8px; padding: 12px;">
+                                <i class="bi bi-chat-left-text me-2"></i>Перейти к чатам
+                                {% if user_unread_count > 0 %}
+                                <span class="badge rounded-pill float-end" style="background: #FF6B35; color: white;">
+                                    {{ user_unread_count }} новых
+                                </span>
+                                {% endif %}
+                            </a>
                         </div>
 
                         <hr style="border-color: #3a3a40;" class="my-4">

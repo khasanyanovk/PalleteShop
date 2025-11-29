@@ -279,6 +279,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {% if 'chat' in request.resolver_match.url_name %}active{% endif %} position-relative" href="{% url 'admin_panel:admin_chat_list' %}">
+                        <i class="bi bi-chat-dots me-2"></i>
+                        Чаты
+                        {% if admin_unread_count > 0 %}
+                        <span class="position-absolute top-50 start-100 translate-middle badge rounded-pill" style="background: #FF6B35; margin-left: -20px;">
+                            {{ admin_unread_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {% if 'settings' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'admin_panel:site_settings' %}">
                         <i class="bi bi-gear me-2"></i>
                         Настройки сайта

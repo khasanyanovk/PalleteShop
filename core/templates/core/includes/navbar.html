@@ -22,17 +22,20 @@
                     <a class="nav-link" href="#contact" style="color: rgba(228, 228, 231, 0.9);">Контакты</a>
                 </li>
             </ul>
-            <button class="btn ms-3" style="background: #FF6B35; color: white; border-radius: 8px; font-weight: 600;">
-                <i class="bi bi-telephone-fill me-2"></i>Заказать звонок
-            </button>
             {% if user.is_authenticated %}
                 {% if user.is_staff or user.is_superuser %}
                 <a href="{% url 'admin_panel:dashboard' %}" class="btn btn-outline-light ms-2" style="border-radius: 8px;">
                     <i class="bi bi-gear-fill me-2"></i>Админ-панель
                 </a>
                 {% endif %}
-                <a href="{% url 'core:profile' %}" class="btn btn-outline-light ms-2" style="border-radius: 8px;">
+                <a href="{% url 'core:profile' %}" class="btn btn-outline-light ms-2 position-relative" style="border-radius: 8px;">
                     <i class="bi bi-person-circle me-2"></i>Профиль
+                    <!-- DEBUG: user_unread_count = {{ user_unread_count|default:"NOT SET" }} -->
+                    {% if user_unread_count %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" style="background: #FF6B35;">
+                        {{ user_unread_count }}
+                    </span>
+                    {% endif %}
                 </a>
                 <a href="{% url 'core:logout' %}" class="btn btn-outline-light ms-2" style="border-radius: 8px;">
                     <i class="bi bi-box-arrow-right me-2"></i>Выйти

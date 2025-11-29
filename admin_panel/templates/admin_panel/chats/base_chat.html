@@ -1,0 +1,42 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block content %}
+<style>
+    /* Скрываем тосты только для страниц чатов */
+    .toast-container {
+        display: none !important;
+    }
+    
+    /* Custom scrollbar */
+    textarea::-webkit-scrollbar,
+    .messages-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    textarea::-webkit-scrollbar-track,
+    .messages-container::-webkit-scrollbar-track {
+        background: #1e1e22;
+        border-radius: 4px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb,
+    .messages-container::-webkit-scrollbar-thumb {
+        background: #3a3a40;
+        border-radius: 4px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb:hover,
+    .messages-container::-webkit-scrollbar-thumb:hover {
+        background: #4a4a50;
+    }
+    
+    /* Firefox scrollbar */
+    textarea,
+    .messages-container {
+        scrollbar-width: thin;
+        scrollbar-color: #3a3a40 #1e1e22;
+    }
+</style>
+
+{% block chat_content %}{% endblock %}
+{% endblock %}

@@ -32,28 +32,77 @@
         footer {
             flex-shrink: 0;
         }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            background: #2a2a2e;
+            border: 1px solid #3a3a40;
+            border-left: 4px solid #FF6B35;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            color: #ffffff;
+            min-width: 300px;
+        }
+        
+        .toast.bg-success {
+            border-left-color: #10b981;
+        }
+        
+        .toast.bg-danger, .toast.bg-error {
+            border-left-color: #ef4444;
+        }
+        
+        .toast.bg-warning {
+            border-left-color: #f59e0b;
+        }
+        
+        .toast.bg-info {
+            border-left-color: #3b82f6;
+        }
+        
+        .toast-body {
+            padding: 1rem;
+            color: #e4e4e7;
+        }
+        
+        .btn-close-white {
+            filter: brightness(0) invert(1);
+        }
     </style>
 </head>
 <body>
     {% include 'core/includes/navbar.html' %}
 
-    {% if messages %}
-    <div class="container mt-3">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {% if message.tags == 'success' %}
-                <i class="bi bi-check-circle-fill me-2"></i>
-            {% elif message.tags == 'error' %}
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            {% elif message.tags == 'info' %}
-                <i class="bi bi-info-circle-fill me-2"></i>
-            {% endif %}
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endfor %}
+    <!-- Toast Container -->
+    <div class="toast-container">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="toast align-items-center bg-{{ message.tags }}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {% if message.tags == 'success' %}
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                        {% elif message.tags == 'error' or message.tags == 'danger' %}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {% elif message.tags == 'info' %}
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                        {% elif message.tags == 'warning' %}
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
     </div>
-    {% endif %}
 
     <div class="content-wrapper">
         {% block content %}{% endblock %}
@@ -61,6 +110,17 @@
 
     {% include 'core/includes/footer.html' %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Автоматически показываем все тосты при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            var toastList = toastElList.map(function(toastEl) {
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+                return toast;
+            });
+        });
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

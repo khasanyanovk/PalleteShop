@@ -1,0 +1,94 @@
+{% extends 'chats/base_chat.html' %}
+{% load static %}
+
+{% block title %}Мои чаты{% endblock %}
+
+{% block chat_content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 style="color: #e4e4e7; font-weight: 700;">
+                    <i class="bi bi-chat-dots me-2"></i>Мои чаты
+                    <!-- DEBUG: Total user_unread_count = {{ user_unread_count|default:"NOT SET" }} -->
+                </h2>
+                <a href="{% url 'chats:chat_start' %}" class="btn" style="background: #FF6B35; color: white; border-radius: 8px;">
+                    <i class="bi bi-plus-lg me-2"></i>Новый чат
+                </a>
+            </div>
+
+            {% if chats %}
+                <div class="row">
+                    {% for chat in chats %}
+                    <div class="col-12 mb-3">
+                        <a href="{% url 'chats:chat_view' chat.id %}" class="text-decoration-none">
+                            <div class="card" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 12px; transition: all 0.3s;">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="rounded-circle me-3" style="width: 48px; height: 48px; background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%); display: flex; align-items: center; justify-content: center;">
+                                                    <i class="bi bi-headset" style="color: white; font-size: 1.2rem;"></i>
+                                                </div>
+                                                <div>
+                                                    <h5 class="mb-0" style="color: #e4e4e7;">Поддержка</h5>
+                                                    <small style="color: #a1a1aa;">
+                                                        {{ chat.updated_at|date:"d.m.Y H:i" }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            {% if chat.messages.last %}
+                                            <p class="mb-0 small" style="color: #a1a1aa;">
+                                                {% if chat.messages.last.is_admin %}
+                                                    <i class="bi bi-headset me-1"></i>
+                                                {% else %}
+                                                    <i class="bi bi-person me-1"></i>
+                                                {% endif %}
+                                                {{ chat.messages.last.text|truncatewords:10 }}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-end">
+                                            <!-- DEBUG: chat.user_unread_count = {{ chat.user_unread_count }} -->
+                                            {% if chat.user_unread_count > 0 %}
+                                            <span class="badge rounded-pill" style="background: #FF6B35; color: white;">
+                                                {{ chat.user_unread_count }}
+                                            </span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">{{ chat.user_unread_count }}</span>
+                                            {% endif %}
+                                            <div class="mt-2">
+                                                <i class="bi bi-chevron-right" style="color: #FF6B35;"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 16px;">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-chat-left-dots" style="font-size: 4rem; color: #3a3a40;"></i>
+                        <h4 class="mt-4 mb-3" style="color: #e4e4e7;">У вас пока нет чатов</h4>
+                        <p class="text-muted mb-4">Начните чат с нашей поддержкой, чтобы задать вопросы или обсудить заказ</p>
+                        <a href="{% url 'chats:chat_start' %}" class="btn btn-lg" style="background: #FF6B35; color: white; border-radius: 12px; padding: 12px 32px;">
+                            <i class="bi bi-plus-lg me-2"></i>Начать первый чат
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(255, 107, 53, 0.2);
+        border-color: #FF6B35 !important;
+    }
+</style>
+{% endblock %}

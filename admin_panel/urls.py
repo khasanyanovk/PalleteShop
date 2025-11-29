@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from chats import views as chat_views
 
 app_name = "admin_panel"
 
@@ -20,4 +21,12 @@ urlpatterns = [
     ),
     # Настройки сайта
     path("settings/", views.site_settings, name="site_settings"),
+    # Чаты
+    path("chats/", chat_views.admin_chat_list, name="admin_chat_list"),
+    path("chats/<uuid:chat_id>/", chat_views.admin_chat_view, name="admin_chat_view"),
+    path(
+        "chats/<uuid:chat_id>/delete/",
+        chat_views.admin_chat_delete,
+        name="admin_chat_delete",
+    ),
 ]
