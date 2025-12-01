@@ -3,11 +3,6 @@ import uuid
 import logging
 from django.db import models
 from django.contrib.auth import get_user_model
-from notifications.email_sender import (
-    send_user_message_notification,
-    send_admin_message_notification,
-)
-from pallete_shop import settings
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -143,71 +138,35 @@ class Message(models.Model):
         super().save(*args, **kwargs)
 
         if is_new:
+            from .tasks import schedule_notification
+
             if self.is_admin:
                 self.chat.user_unread_count += 1
 
-                if self.chat.user and self.chat.user.email:
-                    logger.info(
-                        f"Отправка уведомления пользователю {self.chat.user.email}, чат #{self.chat.id}"
+                has_email = (self.chat.user and self.chat.user.email) or (
+                    self.chat.guest_user and self.chat.guest_user.email
+                )
+
+                if has_email:
+                    schedule_notification(
+                        message_id=str(self.id),
+                        is_for_user=True,
+                        delay_seconds=200,
                     )
-                    Thread(
-                        target=send_user_message_notification,
-                        args=(
-                            settings.EMAIL_HOST_USER,
-                            self.chat.user.email,
-                            str(self.chat.id),
-                            "Донн Поддонн",
-                            self.text,
-                        ),
-                    ).start()
-                elif self.chat.guest_user and self.chat.guest_user.email:
                     logger.info(
-                        f"Отправка уведомления гостю {self.chat.guest_user.email}, чат #{self.chat.id}"
+                        f"Запланировано уведомление пользователю для сообщения {self.id}, чат #{self.chat.id}"
                     )
-                    Thread(
-                        target=send_user_message_notification,
-                        args=(
-                            settings.EMAIL_HOST_USER,
-                            self.chat.guest_user.email,
-                            str(self.chat.id),
-                            "Поддержка Донн Поддонн",
-                            self.text,
-                        ),
-                    ).start()
             else:
                 self.chat.admin_unread_count += 1
 
-                admin_emails = list(
-                    User.objects.filter(is_staff=True, email__isnull=False)
-                    .exclude(email="")
-                    .values_list("email", flat=True)
+                schedule_notification(
+                    message_id=str(self.id),
+                    is_for_user=False,
+                    delay_seconds=200,
                 )
-
-                if self.chat.user:
-                    sender_name = (
-                        self.chat.user.get_full_name() or self.chat.user.username
-                    )
-                    sender_email = self.chat.user.email or "не указан"
-                    sender_phone = getattr(self.chat.user, "phone", "не указан")
-                else:
-                    sender_name = self.chat.guest_user.name
-                    sender_email = self.chat.guest_user.email or "не указан"
-                if admin_emails:
-                    logger.info(
-                        f"Отправка уведомления администраторам {admin_emails}, чат #{self.chat.id}"
-                    )
-                    Thread(
-                        target=send_admin_message_notification,
-                        args=(
-                            settings.EMAIL_HOST_USER,
-                            admin_emails,
-                            str(self.chat.id),
-                            sender_name,
-                            sender_email,
-                            sender_phone,
-                            self.text,
-                        ),
-                    ).start()
+                logger.info(
+                    f"Запланировано уведомление администраторам для сообщения {self.id}, чат #{self.chat.id}"
+                )
 
             self.chat.save(
                 update_fields=["user_unread_count", "admin_unread_count", "updated_at"]
