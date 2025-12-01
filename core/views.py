@@ -1,5 +1,5 @@
 from threading import Thread
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -45,6 +45,27 @@ def index(request):
         "basket_data": basket_data,
     }
     return render(request, "core/index.html", context)
+
+
+def product_detail(request, product_id):
+    """Детальная страница товара с большими фото и информацией"""
+    product = get_object_or_404(Product, id=product_id)
+    images = product.images.all()
+
+    basket_item = None
+    if request.user.is_authenticated:
+        from basket.models import BasketItem
+
+        basket_item = BasketItem.objects.filter(
+            user=request.user, product=product
+        ).first()
+
+    context = {
+        "product": product,
+        "images": images,
+        "basket_item": basket_item,
+    }
+    return render(request, "core/product_detail.html", context)
 
 
 def about(request):

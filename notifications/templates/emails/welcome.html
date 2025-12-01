@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="supported-color-schemes" content="dark">
     <title>Добро пожаловать!</title>
+    <style type="text/css">
+        /* Предотвращаем переопределение цветов почтовыми клиентами */
+        body { background-color: #1a1a1e !important; }
+        table { border-collapse: collapse !important; }
+        .dark-bg { background-color: #1a1a1e !important; }
+        .content-bg { background-color: #2a2a2e !important; }
+        .orange-gradient { background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%) !important; background-color: #FF6B35 !important; }
+    </style>
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #1a1a1e; color: #e4e4e7;">
     <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #1a1a1e; padding: 40px 20px;">
@@ -14,7 +24,7 @@
                     <tr>
                         <td style="background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%); padding: 40px 30px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                🎨 Донн Поддонн
+                                📦 Донн Поддонн
                             </h1>
                             <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px; opacity: 0.95;">
                                 Покупка, продажа и ремонт поддонов
@@ -23,7 +33,7 @@
                     </tr>
 
                     <tr>
-                        <td style="padding: 50px 40px;">
+                        <td style="padding: 40px 40px 50px 40px;">
                             <h2 style="margin: 0 0 20px 0; color: #FF6B35; font-size: 28px; font-weight: 600;">
                                 Добро пожаловать, {{ username }}! 🎉
                             </h2>

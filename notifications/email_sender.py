@@ -45,6 +45,7 @@ def send_user_message_notification(
 ):
     """Отправка уведомления пользователю о новом сообщении от поддержки"""
     if not to_email:
+        logger.warning("Попытка отправить уведомление пользователю без email")
         return
 
     context = get_site_context()
@@ -70,6 +71,7 @@ def send_user_message_notification(
         logger.info(f"Уведомление пользователю отправлено: {to_email}, чат #{chat_id}")
     except Exception as e:
         logger.error(f"Ошибка отправки уведомления пользователю {to_email}: {e}")
+        logger.info(f"Письмо не отправлено, но работа продолжается")
 
 
 def send_admin_message_notification(

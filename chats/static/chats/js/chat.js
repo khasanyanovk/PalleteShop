@@ -4,6 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const backButton = document.querySelector('a.btn-outline-light');
+            if (backButton) {
+                backButton.click();
+            }
+        }
+    });
+
     const urlParams = new URLSearchParams(window.location.search);
     const prefillMessage = urlParams.get('message');
 

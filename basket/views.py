@@ -77,62 +77,56 @@ def add_to_basket(request, product_id):
 @login_required
 @require_POST
 def update_basket_item(request, item_id):
-    """Обновление количества товара в корзине (AJAX)"""
+    """Обновление количества товара в корзине (AJAX и обычные формы)"""
     basket_item = get_object_or_404(BasketItem, id=item_id, user=request.user)
 
-    try:
-        data = json.loads(request.body)
-        new_quantity = int(data.get("quantity", 1))
+    # Проверяем, это AJAX запрос или обычная форма
+    is_ajax = (
+        request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        or request.content_type == "application/json"
+    )
 
-        if new_quantity < 1:
+    if is_ajax:
+        try:
+            data = json.loads(request.body)
+            new_quantity = int(data.get("quantity", 1))
+        except (ValueError, json.JSONDecodeError):
+            return JsonResponse(
+                {"success": False, "error": "Некорректные данные"}, status=400
+            )
+    else:
+        # Обработка обычной формы
+        action = request.POST.get("action")
+        if action == "increase":
+            new_quantity = basket_item.quantity + 1
+        elif action == "decrease":
+            new_quantity = basket_item.quantity - 1
+        else:
+            new_quantity = int(request.POST.get("quantity", basket_item.quantity))
+
+    if new_quantity < 1:
+        if is_ajax:
             return JsonResponse(
                 {"success": False, "error": "Количество должно быть больше 0"},
                 status=400,
             )
+        else:
+            # Если количество меньше 1, удаляем товар
+            basket_item.delete()
+            return redirect(request.META.get("HTTP_REFERER", "basket:view"))
 
-        if new_quantity > basket_item.product.quantity:
+    if new_quantity > basket_item.product.quantity:
+        error_msg = f"Максимальное доступное количество: {basket_item.product.quantity}"
+        if is_ajax:
             return JsonResponse(
-                {
-                    "success": False,
-                    "error": f"Максимальное доступное количество: {basket_item.product.quantity}",
-                },
+                {"success": False, "error": error_msg},
                 status=400,
             )
+        else:
+            new_quantity = basket_item.product.quantity
 
-        basket_item.quantity = new_quantity
-        basket_item.save()
-
-        basket_count = (
-            BasketItem.objects.filter(user=request.user).aggregate(
-                total=Sum("quantity")
-            )["total"]
-            or 0
-        )
-
-        basket_items = BasketItem.objects.filter(user=request.user)
-        total = sum(item.get_total_price() for item in basket_items)
-
-        return JsonResponse(
-            {
-                "success": True,
-                "quantity": basket_item.quantity,
-                "item_total": float(basket_item.get_total_price()),
-                "basket_count": basket_count,
-                "basket_total": float(total),
-            }
-        )
-    except (ValueError, json.JSONDecodeError):
-        return JsonResponse(
-            {"success": False, "error": "Некорректные данные"}, status=400
-        )
-
-
-@login_required
-@require_POST
-def remove_from_basket(request, item_id):
-    """Удаление товара из корзины (AJAX)"""
-    basket_item = get_object_or_404(BasketItem, id=item_id, user=request.user)
-    basket_item.delete()
+    basket_item.quantity = new_quantity
+    basket_item.save()
 
     basket_count = (
         BasketItem.objects.filter(user=request.user).aggregate(total=Sum("quantity"))[
@@ -144,13 +138,52 @@ def remove_from_basket(request, item_id):
     basket_items = BasketItem.objects.filter(user=request.user)
     total = sum(item.get_total_price() for item in basket_items)
 
-    return JsonResponse(
-        {
-            "success": True,
-            "basket_count": basket_count,
-            "basket_total": float(total),
-        }
+    if is_ajax:
+        return JsonResponse(
+            {
+                "success": True,
+                "quantity": basket_item.quantity,
+                "item_total": float(basket_item.get_total_price()),
+                "basket_count": basket_count,
+                "basket_total": float(total),
+            }
+        )
+    else:
+        return redirect(request.META.get("HTTP_REFERER", "basket:view"))
+
+
+@login_required
+@require_POST
+def remove_from_basket(request, item_id):
+    """Удаление товара из корзины (AJAX и обычные формы)"""
+    basket_item = get_object_or_404(BasketItem, id=item_id, user=request.user)
+    basket_item.delete()
+
+    is_ajax = (
+        request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        or request.content_type == "application/json"
     )
+
+    basket_count = (
+        BasketItem.objects.filter(user=request.user).aggregate(total=Sum("quantity"))[
+            "total"
+        ]
+        or 0
+    )
+
+    basket_items = BasketItem.objects.filter(user=request.user)
+    total = sum(item.get_total_price() for item in basket_items)
+
+    if is_ajax:
+        return JsonResponse(
+            {
+                "success": True,
+                "basket_count": basket_count,
+                "basket_total": float(total),
+            }
+        )
+    else:
+        return redirect(request.META.get("HTTP_REFERER", "basket:view"))
 
 
 @login_required

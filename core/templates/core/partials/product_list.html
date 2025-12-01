@@ -1,16 +1,41 @@
 {% for product in products %}
 <div class="col-md-6 col-lg-4">
-    <div class="card product-card h-100" style="background: #e4e4e7 !important; transition: all 0.3s ease; transform-origin: center center;">
+    <div class="card product-card h-100 clickable-card" style="background: #e4e4e7 !important; transition: all 0.3s ease; transform-origin: center center; cursor: pointer;" data-product-url="{% url 'core:product_detail' product.id %}">
         <div class="position-relative">
-            {% if product.images.all %}
-                {% with product.images.all.0 as first_image %}
-                <img src="{{ first_image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
-                {% endwith %}
+            {% with product.get_primary_image as primary_image %}
+            {% if primary_image %}
+                {% if product.images.all|length > 1 %}
+                <div id="carousel-{{ product.id }}" class="carousel slide" data-bs-ride="false" style="height: 250px;">
+                    <div class="carousel-inner" style="height: 100%;">
+                        {% for image in product.images.all %}
+                        <div class="carousel-item {% if image.is_primary %}active{% endif %}" style="height: 100%;">
+                            <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ product.id }}" data-bs-slide="prev" style="width: 40px;">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ product.id }}" data-bs-slide="next" style="width: 40px;">
+                        <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 10;">
+                        <span class="badge" style="background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem;">
+                            <i class="bi bi-images"></i> {{ product.images.all|length }}
+                        </span>
+                    </div>
+                </div>
+                {% else %}
+                <img src="{{ primary_image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                {% endif %}
             {% else %}
             <div class="product-image-placeholder">
                 <i class="bi bi-box-seam" style="font-size: 4rem; color: #1a1a1a;"></i>
             </div>
             {% endif %}
+            {% endwith %}
             
             <div class="position-absolute top-0 end-0 m-3">
                 {% if product.condition == 'new' %}

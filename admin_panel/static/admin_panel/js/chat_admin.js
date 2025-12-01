@@ -3,6 +3,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (chatMessages) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const active = document.activeElement;
+            if (active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT')) {
+                return;
+            }
+            const backButton = document.querySelector('a.btn-outline-light');
+            if (backButton) {
+                backButton.click();
+            }
+        }
+    });
     
     const textarea = document.querySelector('textarea');
     if (textarea) {

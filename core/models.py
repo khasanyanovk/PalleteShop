@@ -1,6 +1,27 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.text import slugify
+from unidecode import unidecode
+import os
+from datetime import datetime
+
+
+def product_image_upload_to(instance, filename):
+    """
+    Генерирует безопасный путь для загрузки изображений продуктов.
+    Преобразует кириллицу в латиницу для избежания проблем с URL.
+    """
+    ext = filename.split(".")[-1]
+    name = ".".join(filename.split(".")[:-1])
+    safe_name = slugify(unidecode(name))
+    if not safe_name:
+        safe_name = f"image_{int(datetime.now().timestamp() * 1000000)}"
+    else:
+        safe_name = f"{safe_name}_{int(datetime.now().timestamp() * 1000000)}"
+    return os.path.join(
+        "products", datetime.now().strftime("%Y/%m/%d"), f"{safe_name}.{ext}"
+    )
 
 
 class User(AbstractUser):
@@ -55,6 +76,13 @@ class Product(models.Model):
     def get_condition_display(self):
         return self.ConditionChoices(self.condition).label
 
+    def get_primary_image(self):
+        """Возвращает главное изображение или первое доступное"""
+        primary = self.images.filter(is_primary=True).first()
+        if primary:
+            return primary
+        return self.images.first()
+
     def __str__(self):
         if self.name:
             return self.name
@@ -69,7 +97,7 @@ class ProductImage(models.Model):
         Product, on_delete=models.CASCADE, related_name="images", verbose_name="Продукт"
     )
     image = models.ImageField(
-        upload_to="products/%Y/%m/%d/", verbose_name="Изображение"
+        upload_to=product_image_upload_to, verbose_name="Изображение"
     )
     is_primary = models.BooleanField(default=False, verbose_name="Главное изображение")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")

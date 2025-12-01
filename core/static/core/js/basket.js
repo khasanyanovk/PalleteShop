@@ -150,12 +150,28 @@ function removeFromBasket(itemId, selector) {
 
 document.addEventListener('DOMContentLoaded', function() {
     updateBasketCount();
+    document.addEventListener('click', function(e) {
+        const clickableCard = e.target.closest('.clickable-card');
+        if (clickableCard) {
+            if (!e.target.closest('.order-btn') && 
+                !e.target.closest('.quantity-selector') && 
+                !e.target.closest('.carousel-control-prev') && 
+                !e.target.closest('.carousel-control-next') &&
+                !e.target.closest('a')) {
+                const url = clickableCard.dataset.productUrl;
+                if (url) {
+                    window.location.href = url;
+                }
+            }
+        }
+    });
 });
 
 document.addEventListener('click', function(e) {
     const orderBtn = e.target.closest('.order-btn');
     if (orderBtn) {
         e.preventDefault();
+        e.stopPropagation();
         const productId = orderBtn.dataset.productId;
         addToBasket(productId, orderBtn);
         return;
@@ -164,6 +180,7 @@ document.addEventListener('click', function(e) {
     const increaseBtn = e.target.closest('.quantity-increase');
     if (increaseBtn) {
         e.preventDefault();
+        e.stopPropagation();
         const selector = increaseBtn.closest('.quantity-selector');
         const itemId = selector.dataset.itemId;
         const quantityInput = selector.querySelector('.quantity-input');
@@ -176,6 +193,7 @@ document.addEventListener('click', function(e) {
     const decreaseBtn = e.target.closest('.quantity-decrease');
     if (decreaseBtn) {
         e.preventDefault();
+        e.stopPropagation();
         const selector = decreaseBtn.closest('.quantity-selector');
         const itemId = selector.dataset.itemId;
         const quantityInput = selector.querySelector('.quantity-input');

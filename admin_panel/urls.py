@@ -11,6 +11,16 @@ urlpatterns = [
     path("products/add/", views.product_add, name="product_add"),
     path("products/<uuid:pk>/edit/", views.product_edit, name="product_edit"),
     path("products/<uuid:pk>/delete/", views.product_delete, name="product_delete"),
+    path(
+        "products/images/<uuid:image_id>/delete/",
+        views.product_image_delete,
+        name="product_image_delete",
+    ),
+    path(
+        "products/images/<uuid:image_id>/set-primary/",
+        views.product_image_set_primary,
+        name="product_image_set_primary",
+    ),
     # Пользователи
     path("users/", views.user_list, name="user_list"),
     path("users/<uuid:pk>/edit/", views.user_edit, name="user_edit"),

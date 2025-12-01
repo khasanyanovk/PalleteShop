@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from django.db.models import Count, Sum
 from core.models import Product, ProductImage, User
 from .models import SiteSettings
-from .forms import ProductForm, ProductImageForm, UserForm, SiteSettingsForm
+from .forms import ProductForm, UserForm, SiteSettingsForm
 
 
 def staff_required(user):
@@ -46,8 +45,12 @@ def product_add(request):
         if form.is_valid():
             product = form.save()
 
-            for image in images:
-                ProductImage.objects.create(product=product, image=image)
+            for idx, image in enumerate(images):
+                ProductImage.objects.create(
+                    product=product,
+                    image=image,
+                    is_primary=(idx == 0),
+                )
 
             messages.success(request, "Продукт успешно добавлен!")
             return redirect("admin_panel:product_list")
@@ -70,14 +73,24 @@ def product_edit(request, pk):
         images = request.FILES.getlist("images")
 
         if form.is_valid():
-            form.save()
+            product = form.save()
 
-            # Добавляем новые изображения
-            for image in images:
-                ProductImage.objects.create(product=product, image=image)
+            for idx, image in enumerate(images):
+                has_primary = product.images.filter(is_primary=True).exists()
+                ProductImage.objects.create(
+                    product=product,
+                    image=image,
+                    is_primary=(not has_primary),
+                )
 
-            messages.success(request, "Продукт успешно обновлен!")
-            return redirect("admin_panel:product_list")
+            if images:
+                messages.success(
+                    request,
+                    f"Продукт успешно обновлен! Добавлено изображений: {len(images)}",
+                )
+            else:
+                messages.success(request, "Продукт успешно обновлен!")
+            return redirect("admin_panel:product_edit", pk=product.id)
     else:
         form = ProductForm(instance=product)
 
@@ -165,6 +178,44 @@ def user_delete(request, pk):
         return redirect("admin_panel:user_list")
 
     return render(request, "admin_panel/user_confirm_delete.html", {"user": user})
+
+
+@login_required
+@user_passes_test(staff_required)
+def product_image_delete(request, image_id):
+    """Удаление изображения продукта"""
+    image = get_object_or_404(ProductImage, pk=image_id)
+    product = image.product
+    was_primary = image.is_primary
+
+    if request.method == "POST":
+        image.delete()
+
+        if was_primary:
+            first_image = product.images.first()
+            if first_image:
+                first_image.is_primary = True
+                first_image.save()
+
+        messages.success(request, "Изображение успешно удалено!")
+
+    return redirect("admin_panel:product_edit", pk=product.id)
+
+
+@login_required
+@user_passes_test(staff_required)
+def product_image_set_primary(request, image_id):
+    """Установка главного изображения продукта"""
+    image = get_object_or_404(ProductImage, pk=image_id)
+    product = image.product
+
+    if request.method == "POST":
+        ProductImage.objects.filter(product=product).update(is_primary=False)
+        image.is_primary = True
+        image.save()
+        messages.success(request, "Главное изображение установлено!")
+
+    return redirect("admin_panel:product_edit", pk=product.id)
 
 
 @login_required
