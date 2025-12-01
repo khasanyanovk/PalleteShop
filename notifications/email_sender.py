@@ -51,14 +51,13 @@ def send_user_message_notification(
     context = get_site_context()
     context.update(
         {
-            "chat_id": chat_id,
             "sender_name": sender_name,
             "message_preview": message_preview[:200]
             + ("..." if len(message_preview) > 200 else ""),
         }
     )
 
-    subject = f"Новое сообщение от {sender_name} - Чат #{chat_id}"
+    subject = f"Новое сообщение от {sender_name}"
     text_content = render_to_string("emails/new_message.txt", context)
     html_content = render_to_string("emails/new_message.html", context)
 
@@ -90,7 +89,6 @@ def send_admin_message_notification(
     context = get_site_context()
     context.update(
         {
-            "chat_id": chat_id,
             "sender_name": sender_name,
             "sender_email": sender_email,
             "sender_phone": sender_phone,
@@ -99,7 +97,7 @@ def send_admin_message_notification(
         }
     )
 
-    subject = f"⚠️ Новое обращение от {sender_name} - Чат #{chat_id}"
+    subject = f"⚠️ Новое обращение от {sender_name}"
     text_content = render_to_string("emails/admin_new_message.txt", context)
     html_content = render_to_string("emails/admin_new_message.html", context)
 

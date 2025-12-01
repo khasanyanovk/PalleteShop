@@ -172,11 +172,14 @@
                                 </div>
                             </div>
                             {% else %}
-                            <a href="{% url 'basket:add' product.id %}" class="btn btn-lg w-100 mb-3" 
-                                style="background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%); color: #1a1a1a; border-radius: 12px; font-weight: 600; padding: 16px; border: none;"
-                                {% if not product.in_stock %}onclick="return false;" style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
-                                <i class="bi bi-cart-plus me-2"></i>Добавить в корзину
-                            </a>
+                            <form method="post" action="{% url 'basket:add' product.id %}" class="mb-3">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-lg w-100" 
+                                    style="background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%); color: #1a1a1a; border-radius: 12px; font-weight: 600; padding: 16px; border: none;"
+                                    {% if not product.in_stock %}disabled{% endif %}>
+                                    <i class="bi bi-cart-plus me-2"></i>Добавить в корзину
+                                </button>
+                            </form>
                             {% endif %}
                         {% else %}
                             <a href="{% url 'core:login' %}?next={{ request.path }}" class="btn btn-lg w-100 mb-3" 

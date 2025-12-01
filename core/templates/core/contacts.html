@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="container py-5">
-    <!-- Заголовок -->
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold mb-3" style="color: #e4e4e7;">
             <i class="bi bi-telephone-fill me-3" style="color: #FF6B35;"></i>Наши контакты
@@ -13,7 +12,6 @@
     </div>
 
     <div class="row g-4 mb-5">
-        <!-- Телефон -->
         <div class="col-md-6 col-lg-4">
             <div class="card h-100" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div class="card-body p-4 text-center">
@@ -31,7 +29,6 @@
             </div>
         </div>
 
-        <!-- Email -->
         <div class="col-md-6 col-lg-4">
             <div class="card h-100" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div class="card-body p-4 text-center">
@@ -49,7 +46,6 @@
             </div>
         </div>
 
-        <!-- Адрес -->
         <div class="col-md-12 col-lg-4">
             <div class="card h-100" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                 <div class="card-body p-4 text-center">
@@ -72,7 +68,6 @@
         </div>
     </div>
 
-    <!-- Режим работы -->
     <div class="card mb-5" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
         <div class="card-body p-4">
             <h3 class="text-center mb-4" style="color: #e4e4e7;">
@@ -101,21 +96,34 @@
         </div>
     </div>
 
-    <!-- Способы связи -->
     <div class="text-center p-5" style="background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%); border-radius: 16px; border: 1px solid #FF6B35; box-shadow: 0 4px 20px rgba(255, 107, 53, 0.2);">
         <h3 class="mb-3" style="color: #e4e4e7;">Свяжитесь с нами прямо сейчас!</h3>
         <p class="mb-4" style="color: #a1a1aa;">Выберите удобный для вас способ связи</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="tel:{{ site_settings.phone }}" class="btn btn-lg" style="background: #FF6B35; color: white; border-radius: 12px; font-weight: 600;">
+            <a href="tel:{{ site_settings.phone }}" class="btn btn-lg call-animate-btn" style="background: #FF6B35; color: white; border-radius: 12px; font-weight: 600;">
                 <i class="bi bi-telephone-fill me-2"></i>Позвонить
             </a>
-            <a href="mailto:{{ site_settings.email }}" class="btn btn-lg btn-outline-light" style="border-radius: 12px;">
+            <a href="mailto:{{ site_settings.email }}" class="btn btn-lg btn-outline-light email-animate-btn" style="border-radius: 12px;">
                 <i class="bi bi-envelope-fill me-2"></i>Написать Email
             </a>
-            <a href="{% url 'chats:chat_start' %}" class="btn btn-lg btn-outline-light" style="border-radius: 12px;">
+            <a href="{% url 'chats:chat_start' %}" class="btn btn-lg btn-outline-light email-animate-btn" style="border-radius: 12px;">
                 <i class="bi bi-chat-dots-fill me-2"></i>Онлайн-чат
             </a>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var emailBtns = document.querySelectorAll('.email-animate-btn');
+    emailBtns.forEach(function(btn) {
+        btn.addEventListener('mouseenter', function() {
+            btn.classList.add('pulse-email-btn');
+        });
+        btn.addEventListener('mouseleave', function() {
+            btn.classList.remove('pulse-email-btn');
+        });
+    });
+});
+</script>
 {% endblock %}

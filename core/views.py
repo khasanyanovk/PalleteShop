@@ -89,8 +89,6 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Добро пожаловать, {user.username}!")
-                if user.is_staff or user.is_superuser:
-                    return redirect("admin_panel:dashboard")
                 return redirect("core:index")
     else:
         form = AuthenticationForm()

@@ -35,11 +35,21 @@ def basket_view(request):
 @login_required
 @require_POST
 def add_to_basket(request, product_id):
-    """Добавление товара в корзину (AJAX)"""
+    """Добавление товара в корзину (AJAX и обычные формы)"""
     product = get_object_or_404(Product, id=product_id)
 
+    is_ajax = (
+        request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        or request.content_type == "application/json"
+    )
+
     if not product.in_stock or product.quantity <= 0:
-        return JsonResponse({"success": False, "error": "Товар недоступен"}, status=400)
+        if is_ajax:
+            return JsonResponse(
+                {"success": False, "error": "Товар недоступен"}, status=400
+            )
+        else:
+            return redirect(request.META.get("HTTP_REFERER", "core:index"))
 
     basket_item, created = BasketItem.objects.get_or_create(
         user=request.user, product=product, defaults={"quantity": 1}
@@ -47,13 +57,16 @@ def add_to_basket(request, product_id):
 
     if not created:
         if basket_item.quantity + 1 > product.quantity:
-            return JsonResponse(
-                {
-                    "success": False,
-                    "error": f"Максимальное доступное количество: {product.quantity}",
-                },
-                status=400,
-            )
+            if is_ajax:
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "error": f"Максимальное доступное количество: {product.quantity}",
+                    },
+                    status=400,
+                )
+            else:
+                return redirect(request.META.get("HTTP_REFERER", "core:index"))
         basket_item.quantity += 1
         basket_item.save()
 
@@ -64,14 +77,17 @@ def add_to_basket(request, product_id):
         or 0
     )
 
-    return JsonResponse(
-        {
-            "success": True,
-            "item_id": str(basket_item.id),
-            "quantity": basket_item.quantity,
-            "basket_count": basket_count,
-        }
-    )
+    if is_ajax:
+        return JsonResponse(
+            {
+                "success": True,
+                "item_id": str(basket_item.id),
+                "quantity": basket_item.quantity,
+                "basket_count": basket_count,
+            }
+        )
+    else:
+        return redirect(request.META.get("HTTP_REFERER", "core:index"))
 
 
 @login_required
@@ -80,7 +96,6 @@ def update_basket_item(request, item_id):
     """Обновление количества товара в корзине (AJAX и обычные формы)"""
     basket_item = get_object_or_404(BasketItem, id=item_id, user=request.user)
 
-    # Проверяем, это AJAX запрос или обычная форма
     is_ajax = (
         request.headers.get("X-Requested-With") == "XMLHttpRequest"
         or request.content_type == "application/json"
@@ -95,7 +110,6 @@ def update_basket_item(request, item_id):
                 {"success": False, "error": "Некорректные данные"}, status=400
             )
     else:
-        # Обработка обычной формы
         action = request.POST.get("action")
         if action == "increase":
             new_quantity = basket_item.quantity + 1
@@ -111,7 +125,6 @@ def update_basket_item(request, item_id):
                 status=400,
             )
         else:
-            # Если количество меньше 1, удаляем товар
             basket_item.delete()
             return redirect(request.META.get("HTTP_REFERER", "basket:view"))
 

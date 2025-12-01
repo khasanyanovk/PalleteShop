@@ -4,7 +4,6 @@
 
 {% block content %}
 <div class="container py-5">
-    <!-- Заголовок -->
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold mb-3" style="color: #e4e4e7;">
             <i class="bi bi-info-circle-fill me-3" style="color: #FF6B35;"></i>О нашей компании
@@ -12,7 +11,6 @@
         <p class="lead" style="color: #a1a1aa;">Профессиональная продажа поддонов высокого качества</p>
     </div>
 
-    <!-- Основная информация -->
     <div class="row mb-5">
         <div class="col-lg-6 mb-4">
             <div class="card h-100" style="background: #2a2a2e; border: 1px solid #3a3a40; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
@@ -51,7 +49,6 @@
         </div>
     </div>
 
-    <!-- Преимущества -->
     <div class="mb-5">
         <h2 class="text-center mb-4" style="color: #e4e4e7;">
             <i class="bi bi-star-fill me-2" style="color: #FF6B35;"></i>Наши преимущества
@@ -99,18 +96,31 @@
         </div>
     </div>
 
-    <!-- Призыв к действию -->
     <div class="text-center p-5" style="background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 100%); border-radius: 16px; border: 1px solid #FF6B35; box-shadow: 0 4px 20px rgba(255, 107, 53, 0.2);">
         <h3 class="mb-3" style="color: #e4e4e7;">Готовы начать сотрудничество?</h3>
         <p class="mb-4" style="color: #a1a1aa;">Свяжитесь с нами удобным для вас способом</p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="{% url 'core:contacts' %}" class="btn btn-lg" style="background: #FF6B35; color: white; border-radius: 12px; font-weight: 600;">
+            <a href="{% url 'core:contacts' %}" class="btn btn-lg call-animate-btn" style="background: #FF6B35; color: white; border-radius: 12px; font-weight: 600;">
                 <i class="bi bi-telephone-fill me-2"></i>Контакты
             </a>
-            <a href="{% url 'chats:chat_start' %}" class="btn btn-lg btn-outline-light" style="border-radius: 12px;">
+            <a href="{% url 'chats:chat_start' %}" class="btn btn-lg btn-outline-light email-animate-btn" style="border-radius: 12px;">
                 <i class="bi bi-chat-dots me-2"></i>Написать в чат
             </a>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var emailBtns = document.querySelectorAll('.email-animate-btn');
+    emailBtns.forEach(function(btn) {
+        btn.addEventListener('mouseenter', function() {
+            btn.classList.add('pulse-email-btn');
+        });
+        btn.addEventListener('mouseleave', function() {
+            btn.classList.remove('pulse-email-btn');
+        });
+    });
+});
+</script>
 {% endblock %}
