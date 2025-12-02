@@ -713,3 +713,85 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+/* Убираем скроллбары из всех однострочных полей ввода */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+.form-control:not(textarea),
+.form-select {
+    overflow: hidden !important;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+    -ms-overflow-style: none !important;  /* IE and Edge */
+    scrollbar-width: none !important;  /* Firefox */
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"])::-webkit-scrollbar,
+select::-webkit-scrollbar,
+.form-control:not(textarea)::-webkit-scrollbar,
+.form-select::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Разрешаем скроллбар только для textarea */
+textarea,
+textarea.form-control {
+    overflow: auto !important;
+}
+
+/* Цвет плейсхолдеров для полей ввода */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+    color: #a1a1aa !important;
+    opacity: 1;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder,
+select::-webkit-input-placeholder {
+    color: #a1a1aa !important;
+    opacity: 1;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder,
+select::-moz-placeholder {
+    color: #a1a1aa !important;
+    opacity: 1;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder,
+select:-ms-input-placeholder {
+    color: #a1a1aa !important;
+    opacity: 1;
+}
+
+/* Темный скроллбар только для многострочных полей (textarea) */
+textarea {
+    scrollbar-width: thin;
+    scrollbar-color: #4a4a52 #1e1e22;
+}
+
+textarea::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: #1e1e22;
+    border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #4a4a52;
+    border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #5a5a62;
+}

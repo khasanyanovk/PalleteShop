@@ -20,6 +20,7 @@ env = Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, "insecure-dev-secret-key-change-me"),
     ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
+    CSRF_TRUSTED_ORIGINS=(list, []),
     DJANGO_TIME_ZONE=(str, "Europe/Moscow"),
     DB_ENGINE=(str, "django.db.backends.sqlite3"),
     DB_NAME=(str, str(BASE_DIR / "db.sqlite3")),
@@ -50,6 +51,8 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
+# CSRF trusted origins for production
+CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS")
 
 # Application definition
 
@@ -164,11 +167,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom User Model
 AUTH_USER_MODEL = "core.User"
 
-# Login URL для редиректа при требовании аутентификации
-LOGIN_URL = "login"
-
-# SMTP settings
-
 EMAIL_BACKEND = env("EMAIL_BACKEND")
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
@@ -176,4 +174,3 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_USE_SSL = env("EMAIL_USE_SSL")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-
