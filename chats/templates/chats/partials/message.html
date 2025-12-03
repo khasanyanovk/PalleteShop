@@ -1,16 +1,16 @@
 {% if message.is_admin %}
-<div class="message admin-message">
+<div class="message admin-message" data-message-id="{{ message.id }}">
     <div class="message-bubble">
-        <div>{{ message.text }}</div>
+        <div>{{ message.get_formatted_text|safe }}</div>
         <div class="message-time">
             {{ message.created_at|date:"H:i, d.m.Y" }}
         </div>
     </div>
 </div>
 {% else %}
-<div class="message user-message">
+<div class="message user-message" data-message-id="{{ message.id }}">
     <div class="message-bubble">
-        <div>{{ message.text }}</div>
+        <div>{{ message.get_formatted_text|safe }}</div>
         <div class="message-time">
             {{ message.created_at|date:"H:i, d.m.Y" }}
             {% if not message.is_read %}

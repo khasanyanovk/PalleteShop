@@ -88,3 +88,65 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML.replace(/\n/g, '<br>');
 }
+
+function pollNewMessages() {
+    const chatMessages = document.getElementById('adminChatMessages');
+    if (!chatMessages) return;
+
+    const pathParts = window.location.pathname.split('/');
+    const chatIndex = pathParts.indexOf('chats');
+    const chatId = pathParts[chatIndex + 1];
+    
+    if (!chatId) return;
+    
+    const lastMessage = chatMessages.querySelector('.message:last-child');
+    let lastMessageId = null;
+    
+    if (lastMessage) {
+        lastMessageId = lastMessage.dataset.messageId;
+        
+        if (!lastMessageId) {
+            if (!window.lastPolledMessageId) {
+                window.lastPolledMessageId = Date.now().toString();
+            }
+            lastMessageId = window.lastPolledMessageId;
+        }
+    }
+    
+    const url = `/chats/${chatId}/new-messages/?last_id=${lastMessageId || ''}`;
+    
+    fetch(url, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        if (html.trim()) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            
+            const newMessages = tempDiv.querySelectorAll('.message');
+            if (newMessages.length > 0) {
+                const wasScrolledToBottom = chatMessages.scrollHeight - chatMessages.scrollTop <= chatMessages.clientHeight + 50;
+                
+                newMessages.forEach(message => {
+                    chatMessages.appendChild(message);
+                    
+                    if (message.dataset.messageId) {
+                        window.lastPolledMessageId = message.dataset.messageId;
+                    }
+                });
+                
+                if (wasScrolledToBottom) {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error polling messages:', error);
+    });
+}
+
+setInterval(pollNewMessages, 2000);

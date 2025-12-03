@@ -29,7 +29,7 @@
                             <i class="bi bi-person-circle"></i>
                         </div>
                         <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
-                        {% if user_unread_count %}
+                        {% if user_unread_count > 0 %}
                         <span class="notification-badge">{{ user_unread_count }}</span>
                         {% endif %}
                     </button>
@@ -53,7 +53,7 @@
                             {% endif %}
                                 <i class="bi bi-chat-dots me-2"></i>
                                 <span>Чаты</span>
-                                {% if user_unread_count %}
+                                {% if user_unread_count > 0 %}
                                 <span class="ms-auto badge" style="background: #FF6B35;">{{ user_unread_count }}</span>
                                 {% endif %}
                             </a>
