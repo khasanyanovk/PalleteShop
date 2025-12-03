@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     const messagesContainer = document.getElementById('adminChatMessages');
                     const messageHtml = `
-                        <div class="message admin-message">
+                        <div class="message admin-message" data-message-id="${data.message_id}">
                             <div class="message-bubble">
                                 <div>${escapeHtml(messageText)}</div>
                                 <div class="message-time">
@@ -68,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                    // Обновляем ID последнего сообщения для polling
+                    window.lastPolledMessageId = data.message_id;
 
                     textarea.value = '';
                     textarea.style.height = 'auto';
@@ -131,10 +134,13 @@ function pollNewMessages() {
                 const wasScrolledToBottom = chatMessages.scrollHeight - chatMessages.scrollTop <= chatMessages.clientHeight + 50;
                 
                 newMessages.forEach(message => {
-                    chatMessages.appendChild(message);
-                    
-                    if (message.dataset.messageId) {
-                        window.lastPolledMessageId = message.dataset.messageId;
+                    const messageId = message.dataset.messageId;
+                    if (messageId && !chatMessages.querySelector(`[data-message-id="${messageId}"]`)) {
+                        chatMessages.appendChild(message);
+                        
+                        if (message.dataset.messageId) {
+                            window.lastPolledMessageId = message.dataset.messageId;
+                        }
                     }
                 });
                 
