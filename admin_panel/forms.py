@@ -78,6 +78,7 @@ class SiteSettingsForm(forms.ModelForm):
             "vk_link",
             "telegram_link",
             "avito_link",
+            "whatsapp_link",
         ]
         widgets = {
             "phone": forms.TextInput(attrs={"class": "form-control"}),
@@ -103,6 +104,12 @@ class SiteSettingsForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "https://www.avito.ru/user/...",
+                }
+            ),
+            "whatsapp_link": forms.URLInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "https://wa.me/79991234567",
                 }
             ),
         }
