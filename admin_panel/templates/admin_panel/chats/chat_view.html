@@ -133,7 +133,7 @@
     <div class="admin-chat-messages" id="adminChatMessages">
         {% for message in messages %}
             {% if message.is_admin %}
-            <div class="message admin-message">
+            <div class="message admin-message" data-message-id="{{ message.id }}">
                 <div class="message-bubble">
                     <div>{{ message.get_formatted_text|safe }}</div>
                     <div class="message-time">
@@ -142,7 +142,7 @@
                 </div>
             </div>
             {% else %}
-            <div class="message client-message">
+            <div class="message client-message" data-message-id="{{ message.id }}">
                 <div class="message-bubble">
                     <div>{{ message.get_formatted_text|safe }}</div>
                     <div class="message-time">
