@@ -224,15 +224,19 @@ def admin_chat_delete(request, chat_id):
 
 
 def get_new_messages(request, chat_id):
-    """Получить новые сообщения для HTMX polling"""
+    """Получить новые сообщения для polling"""
 
     chat = get_object_or_404(Chat, id=chat_id)
     last_message_id = request.GET.get("last_id")
 
     if last_message_id:
-        new_messages = Message.objects.filter(
-            chat=chat, id__gt=last_message_id
-        ).order_by("created_at")
+        try:
+            last_message = Message.objects.get(id=last_message_id)
+            new_messages = Message.objects.filter(
+                chat=chat, created_at__gt=last_message.created_at
+            ).order_by("created_at")
+        except Message.DoesNotExist:
+            new_messages = Message.objects.none()
     else:
         new_messages = Message.objects.none()
 
