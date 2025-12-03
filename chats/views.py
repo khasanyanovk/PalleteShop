@@ -3,8 +3,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q
+import logging
 from .models import Chat, Message, GuestUser
 from .forms import GuestUserForm, MessageForm, ChatStartForm
+
+logger = logging.getLogger(__name__)
 
 
 def staff_required(user):
@@ -42,20 +45,54 @@ def chat_start(request):
             chat_form = ChatStartForm(request.POST)
 
             if guest_form.is_valid() and chat_form.is_valid():
-                guest_user = guest_form.save(commit=False)
-                guest_user.session_key = (
-                    request.session.session_key or request.session.create()
-                )
-                guest_user.save()
+                try:
+                    if not request.session.session_key:
+                        request.session.create()
 
-                chat = Chat.objects.create(guest_user=guest_user)
-                Message.objects.create(
-                    chat=chat, text=chat_form.cleaned_data["message"], is_admin=False
-                )
+                    guest_user = GuestUser.objects.filter(
+                        session_key=request.session.session_key
+                    ).first()
 
-                request.session["guest_chat_id"] = str(chat.id)
+                    if guest_user:
+                        guest_user.name = guest_form.cleaned_data["name"]
+                        guest_user.email = guest_form.cleaned_data.get("email")
+                        guest_user.phone = guest_form.cleaned_data["phone"]
+                        guest_user.save()
+                    else:
+                        guest_user = guest_form.save(commit=False)
+                        guest_user.session_key = request.session.session_key
+                        guest_user.save()
 
-                return redirect(f"/chats/{chat.id}/?just_created=1")
+                    existing_chat = Chat.objects.filter(
+                        guest_user=guest_user, is_active=True
+                    ).first()
+
+                    if existing_chat:
+                        Message.objects.create(
+                            chat=existing_chat,
+                            text=chat_form.cleaned_data["message"],
+                            is_admin=False,
+                        )
+                        return redirect(f"/chats/{existing_chat.id}/")
+
+                    chat = Chat.objects.create(guest_user=guest_user)
+                    Message.objects.create(
+                        chat=chat,
+                        text=chat_form.cleaned_data["message"],
+                        is_admin=False,
+                    )
+
+                    request.session["guest_chat_id"] = str(chat.id)
+
+                    return redirect(f"/chats/{chat.id}/?just_created=1")
+
+                except Exception as e:
+                    logger.error(f"Error creating guest chat: {e}", exc_info=True)
+                    messages.error(
+                        request,
+                        "Произошла ошибка при создании чата. Попробуйте еще раз.",
+                    )
+
         else:
             guest_form = GuestUserForm()
             chat_form = ChatStartForm()
