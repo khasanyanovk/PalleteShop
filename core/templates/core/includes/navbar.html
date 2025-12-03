@@ -1,0 +1,300 @@
+<nav class="navbar navbar-expand-lg sticky-top" style="background: #2a2a2e; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <i class="bi bi-box-seam fs-2 me-2" style="color: #FF6B35;"></i>
+            <span class="fw-bold fs-4" style="color: #e4e4e7;">Донн Поддонн</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="border-color: #FF6B35;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:index' %}" style="color: rgba(228, 228, 231, 0.9);">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:index' %}#products" style="color: rgba(228, 228, 231, 0.9);">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:about' %}" style="color: rgba(228, 228, 231, 0.9);">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:contacts' %}" style="color: rgba(228, 228, 231, 0.9);">Контакты</a>
+                </li>
+                
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown ms-3">
+                    <button class="btn user-menu-btn dropdown-toggle d-flex align-items-center gap-2" type="button" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="user-avatar">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
+                        {% if user_unread_count %}
+                        <span class="notification-badge">{{ user_unread_count }}</span>
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userMenuDropdown">
+                        <li class="user-info">
+                            <div class="user-info-avatar">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="user-info-details">
+                                <div class="user-info-name">{{ user.get_full_name|default:user.username }}</div>
+                                <div class="user-info-email">{{ user.email }}</div>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li>
+                            {% if user.is_staff or user.is_superuser %}
+                            <a class="dropdown-item" href="{% url 'admin_panel:admin_chat_list' %}">
+                            {% else %}
+                            <a class="dropdown-item" href="{% url 'chats:user_chat_list' %}">
+                            {% endif %}
+                                <i class="bi bi-chat-dots me-2"></i>
+                                <span>Чаты</span>
+                                {% if user_unread_count %}
+                                <span class="ms-auto badge" style="background: #FF6B35;">{{ user_unread_count }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'basket:view' %}">
+                                <i class="bi bi-cart3 me-2"></i>
+                                <span>Корзина</span>
+                                <span class="basket-count ms-auto badge bg-secondary" style="display: none;">0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'core:profile' %}">
+                                <i class="bi bi-person me-2"></i>
+                                <span>Профиль</span>
+                            </a>
+                        </li>
+                        
+                        {% if user.is_staff or user.is_superuser %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'admin_panel:dashboard' %}">
+                                <i class="bi bi-gear-fill me-2"></i>
+                                <span>Админ-панель</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                <span>Выйти</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item ms-3">
+                    <a href="{% url 'core:login' %}" class="btn login-btn">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        <span>Войти</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+/* User Menu Button */
+.user-menu-btn {
+    background: linear-gradient(135deg, #3a3a40 0%, #4a4a52 100%);
+    border: 1px solid #FF6B35;
+    color: #e4e4e7;
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+    position: relative;
+}
+
+.user-menu-btn:hover {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    border-color: #FF8C61;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+}
+
+.user-menu-btn:focus {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+}
+
+.user-menu-btn .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.user-menu-btn .user-name {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-menu-btn .notification-badge {
+    background: #ef4444;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Dropdown Menu */
+.user-dropdown {
+    background: #2a2a2e;
+    border: 1px solid #FF6B35;
+    border-radius: 16px;
+    padding: 8px;
+    min-width: 280px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    margin-top: 8px;
+}
+
+.user-dropdown .dropdown-divider {
+    border-color: #3a3a40;
+    margin: 8px 0;
+}
+
+/* User Info Section */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #3a3a40 0%, #4a4a52 100%);
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.user-info-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.user-info-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-info-name {
+    color: #e4e4e7;
+    font-weight: 700;
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-info-email {
+    color: #a1a1aa;
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Dropdown Items */
+.user-dropdown .dropdown-item {
+    color: #e4e4e7;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.user-dropdown .dropdown-item:hover {
+    background: linear-gradient(135deg, #3a3a40 0%, #4a4a52 100%);
+    color: #FF6B35;
+    transform: translateX(4px);
+}
+
+.user-dropdown .dropdown-item.text-danger {
+    color: #ef4444;
+}
+
+.user-dropdown .dropdown-item.text-danger:hover {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white !important;
+}
+
+.user-dropdown .dropdown-item i {
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+/* Login Button */
+.login-btn {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
+    border: none;
+    color: white;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #FF8C61 0%, #FFB088 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.5);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 991px) {
+    .user-menu-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 12px;
+    }
+    
+    .user-dropdown {
+        width: 100%;
+    }
+    
+    .login-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 12px;
+    }
+}
+</style>

@@ -1,0 +1,117 @@
+{% for product in products %}
+<div class="col-md-6 col-lg-4">
+    <div class="card product-card h-100 clickable-card" style="background: #e4e4e7 !important; transition: all 0.3s ease; transform-origin: center center; cursor: pointer;" data-product-url="{% url 'core:product_detail' product.id %}">
+        <div class="position-relative">
+            {% with product.get_primary_image as primary_image %}
+            {% if primary_image %}
+                {% if product.images.all|length > 1 %}
+                <div id="carousel-{{ product.id }}" class="carousel slide" data-bs-ride="false" style="height: 250px;">
+                    <div class="carousel-inner" style="height: 100%;">
+                        {% for image in product.images.all %}
+                        <div class="carousel-item {% if image.is_primary %}active{% endif %}" style="height: 100%;">
+                            <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ product.id }}" data-bs-slide="prev" style="width: 40px;">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ product.id }}" data-bs-slide="next" style="width: 40px;">
+                        <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <div class="position-absolute bottom-0 end-0 m-2" style="z-index: 10;">
+                        <span class="badge" style="background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem;">
+                            <i class="bi bi-images"></i> {{ product.images.all|length }}
+                        </span>
+                    </div>
+                </div>
+                {% else %}
+                <img src="{{ primary_image.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                {% endif %}
+            {% else %}
+            <div class="product-image-placeholder">
+                <i class="bi bi-box-seam" style="font-size: 4rem; color: #1a1a1a;"></i>
+            </div>
+            {% endif %}
+            {% endwith %}
+            
+            <div class="position-absolute top-0 end-0 m-3">
+                {% if product.condition == 'new' %}
+                <span class="badge badge-custom" style="background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%); color: #f5f5f5;">
+                    <i class="bi bi-star-fill me-1"></i>Новый
+                </span>
+                {% else %}
+                <span class="badge badge-custom" style="background: linear-gradient(135deg, #3a3a40 0%, #4a4a52 100%); color: #e4e4e7;">
+                    <i class="bi bi-recycle me-1"></i>Б/У
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold mb-3" style="color: #1a1a1a;">{{ product.name }}</h5>
+            
+            <div class="mb-3">
+                <div class="d-flex align-items-center mb-2" style="color: #1a1a1a;">
+                    <i class="bi bi-rulers me-2" style="color: #FF6B35;"></i>
+                    <span>{{ product.length|floatformat:0 }}×{{ product.width|floatformat:0 }} см</span>
+                </div>
+                
+                <div class="d-flex align-items-center mb-2" style="color: #1a1a1a;">
+                    <i class="bi bi-tree me-2" style="color: #71717a;"></i>
+                    <span>{{ product.wood_type }}</span>
+                </div>
+                
+                <div class="d-flex align-items-center mb-2" style="color: #1a1a1a;">
+                    <i class="bi bi-speedometer2 me-2" style="color: #FF6B35;"></i>
+                    <span>Грузоподъемность: {{ product.load_capacity }} кг</span>
+                </div>
+                
+                <div class="d-flex align-items-center" style="color: #1a1a1a;">
+                    <i class="bi bi-box-seam me-2" style="color: #71717a;"></i>
+                    <span>В наличии: {{ product.quantity }} шт</span>
+                </div>
+            </div>
+
+            <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center border-top pt-3" style="border-color: #3a3a40 !important;">
+                    <div>
+                        <div class="price-tag" style="color: #1a1a1a;">{{ product.price|floatformat:0 }} ₽</div>
+                        <small style="color: #1a1a1a;">за штуку</small>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                    <button class="btn order-btn {% if product.id|stringformat:'s' in basket_data.keys %}d-none{% endif %}" data-product-id="{{ product.id }}" style="background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%); color: #1a1a1a; border-radius: 8px; font-weight: 600;">
+                        <i class="bi bi-cart-plus me-2"></i>Заказать
+                    </button>
+
+                    <div class="quantity-selector {% if not product.id|stringformat:'s' in basket_data.keys %}d-none{% endif %}" data-product-id="{{ product.id }}" data-item-id="{% for key, value in basket_data.items %}{% if key == product.id|stringformat:'s' %}{{ value.item_id }}{% endif %}{% endfor %}" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <button class="btn btn-sm quantity-decrease" style="background: #3a3a40; color: #e4e4e7; border-radius: 6px; width: 32px; height: 32px; padding: 0;">
+                            <i class="bi bi-dash"></i>
+                        </button>
+                        <input type="number" class="quantity-input form-control form-control-sm text-center" min="1" value="{% for key, value in basket_data.items %}{% if key == product.id|stringformat:'s' %}{{ value.quantity }}{% endif %}{% endfor %}{% if not product.id|stringformat:'s' in basket_data.keys %}1{% endif %}" style="width: 60px; background: #1e1e22; color: #e4e4e7; border: 1px solid #3a3a40; border-radius: 6px;">
+                        <button class="btn btn-sm quantity-increase" style="background: #3a3a40; color: #e4e4e7; border-radius: 6px; width: 32px; height: 32px; padding: 0;">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'core:login' %}" class="btn" style="background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%); color: #1a1a1a; border-radius: 8px; font-weight: 600;">
+                        <i class="bi bi-cart-plus me-2"></i>Заказать
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-12">
+    <div class="text-center py-5">
+        <i class="bi bi-inbox display-1 mb-3" style="color: #a1a1aa;"></i>
+        <h3 class="fw-semibold mb-2" style="color: #e4e4e7;">Нет доступных товаров</h3>
+        <p style="color: #a1a1aa;">В данный момент товары отсутствуют. Свяжитесь с нами для уточнения наличия.</p>
+    </div>
+</div>
+{% endfor %}

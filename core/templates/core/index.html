@@ -1,0 +1,177 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<section class="hero-section text-light py-5" style="background: linear-gradient(135deg, #17171a 0%, #2a2a2e 50%, #FF6B35 100%);">
+    <div class="container">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-8 mx-auto text-center animate-fade-in">
+                <h1 class="display-3 fw-bold mb-4">
+                    Качественные поддоны<br/>
+                    <span style="color: #FF6B35;">для вашего бизнеса</span>
+                </h1>
+                <p class="lead mb-4" style="color: rgba(228, 228, 231, 0.9); font-size: 1.3rem;">
+                    Широкий выбор новых и б/у поддонов. Доставка по Нижнему Новгороду и области. 
+                    Работаем с НДС и без.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="#products" class="btn btn-lg" style="background: #FF6B35; color: white; border-radius: 12px; padding: 12px 32px; font-weight: 600;">
+                        <i class="bi bi-grid-3x3-gap me-2"></i>Смотреть каталог
+                    </a>
+                    <a href="{% url 'chats:chat_start' %}" class="btn btn-outline-light btn-lg" style="border-radius: 12px; border-width: 2px; padding: 12px 32px;">
+                        <i class="bi bi-chat-dots me-2"></i>Получить консультацию
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background: #25252b;">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="fs-1 fw-bold mb-2" style="color: #FF6B35;">1000+</div>
+                    <div class="fw-semibold" style="color: #a1a1aa;">Довольных клиентов</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="fs-1 fw-bold mb-2" style="color: #FF6B35;">5000+</div>
+                    <div class="fw-semibold" style="color: #a1a1aa;">Поддонов в наличии</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card text-center">
+                    <div class="fs-1 fw-bold mb-2" style="color: #FF6B35;">24/7</div>
+                    <div class="fw-semibold" style="color: #a1a1aa;">Поддержка клиентов</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="products" class="py-5" style="background: #1e1e22;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3" style="color: #e4e4e7;">Наш ассортимент</h2>
+            <p class="lead" style="color: #a1a1aa;">Выберите подходящие поддоны из нашего каталога</p>
+        </div>
+
+        <div class="mb-4">
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <button class="filter-btn active" 
+                        hx-get="/?filter=all" 
+                        hx-target="#product-list" 
+                        hx-swap="innerHTML swap:0.3s"
+                        hx-indicator=".htmx-indicator">
+                    <span><i class="bi bi-grid-fill me-2"></i>Все</span>
+                </button>
+                <button class="filter-btn" 
+                        hx-get="/?filter=new" 
+                        hx-target="#product-list" 
+                        hx-swap="innerHTML swap:0.3s"
+                        hx-indicator=".htmx-indicator">
+                    <span><i class="bi bi-star-fill me-2"></i>Новые</span>
+                </button>
+                <button class="filter-btn" 
+                        hx-get="/?filter=used" 
+                        hx-target="#product-list" 
+                        hx-swap="innerHTML swap:0.3s"
+                        hx-indicator=".htmx-indicator">
+                    <span><i class="bi bi-recycle me-2"></i>Б/У</span>
+                </button>
+            </div>
+            <div class="text-center mt-3">
+                <div class="htmx-indicator spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="product-list" class="row g-4">
+            {% include 'core/partials/product_list.html' %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background: #25252b;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3" style="color: #e4e4e7;">Почему выбирают нас</h2>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check fs-1 text-white"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2" style="color: #e4e4e7;">Гарантия качества</h5>
+                    <p style="color: #a1a1aa;">Все поддоны проходят строгий контроль качества</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-truck fs-1 text-white"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2" style="color: #e4e4e7;">Быстрая доставка</h5>
+                    <p style="color: #a1a1aa;">Доставим ваш заказ точно в срок</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-cash-coin fs-1 text-white"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2" style="color: #e4e4e7;">Выгодные цены</h5>
+                    <p style="color: #a1a1aa;">Лучшие цены на рынке поддонов</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="feature-icon">
+                        <i class="bi bi-headset fs-1 text-white"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2" style="color: #e4e4e7;">Поддержка 24/7</h5>
+                    <p style="color: #a1a1aa;">Всегда готовы помочь вам</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background: linear-gradient(135deg, #2a2a2e 0%, #3a3a40 50%, #FF6B35 100%);">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4" style="color: #e4e4e7;">Готовы сделать заказ?</h2>
+        <p class="lead mb-4" style="color: rgba(228, 228, 231, 0.85);">
+            Свяжитесь с нами прямо сейчас и получите специальное предложение
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="tel:+7XXXXXXXXXX" class="btn btn-primary-custom btn-lg call-animate-btn">
+                <i class="bi bi-telephone-fill me-2"></i>Позвонить нам
+            </a>
+            <a href="mailto:info@palleteshop.ru" class="btn btn-lg email-animate-btn" style="border-radius: 12px; background: transparent; border: 2px solid #FF6B35; color: #e4e4e7; transition: all 0.3s; position: relative; overflow: hidden;">
+                <i class="bi bi-envelope-fill me-2"></i>Написать email
+            </a>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var emailBtn = document.querySelector('.email-animate-btn');
+            if (emailBtn) {
+                emailBtn.addEventListener('mouseenter', function() {
+                    emailBtn.classList.add('pulse-email-btn');
+                });
+                emailBtn.addEventListener('mouseleave', function() {
+                    emailBtn.classList.remove('pulse-email-btn');
+                });
+            }
+        });
+        </script>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Удалить пользователя{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Подтверждение удаления
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Внимание!</strong> Это действие необратимо. Все данные пользователя будут удалены безвозвратно.
+                </div>
+
+                <h5 class="mb-3">Вы уверены, что хотите удалить пользователя?</h5>
+                
+                <div class="card bg-light mb-4">
+                    <div class="card-body text-dark">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <strong>Имя пользователя:</strong><br>
+                                <i class="bi bi-person-circle me-2"></i>{{ user.username }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Email:</strong><br>
+                                <i class="bi bi-envelope me-2"></i>{{ user.email|default:"—" }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Имя:</strong><br>
+                                {{ user.first_name }} {{ user.last_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Телефон:</strong><br>
+                                {{ user.phone|default:"—" }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Статус:</strong><br>
+                                {% if user.is_active %}
+                                    <span class="badge bg-success">Активен</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Заблокирован</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong>Роль:</strong><br>
+                                {% if user.is_superuser %}
+                                    <span class="badge bg-danger">Суперадмин</span>
+                                {% elif user.is_staff %}
+                                    <span class="badge bg-primary">Персонал</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Пользователь</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-12">
+                                <strong>Дата регистрации:</strong><br>
+                                <i class="bi bi-calendar-event me-2"></i>{{ user.date_joined|date:"d.m.Y H:i" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-octagon me-2"></i>
+                    <strong>Будут удалены:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Профиль пользователя</li>
+                        <li>Все чаты и сообщения</li>
+                        <li>Корзина покупок</li>
+                        <li>История активности</li>
+                    </ul>
+                </div>
+
+                <form method="post" class="d-flex gap-2 justify-content-end">
+                    {% csrf_token %}
+                    <a href="{% url 'admin_panel:user_list' %}" class="btn btn-secondary">
+                        <i class="bi bi-x-circle me-2"></i>Отмена
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Удалить пользователя
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

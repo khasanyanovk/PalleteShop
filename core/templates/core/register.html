@@ -1,0 +1,145 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg" style="border: none; border-radius: 16px; background: #2a2a2e;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-plus-fill" style="font-size: 4rem; color: #FF6B35;"></i>
+                        <h2 class="mt-3" style="color: #e4e4e7;">Регистрация</h2>
+                        <p style="color: rgba(228, 228, 231, 0.7);">Создайте новый аккаунт</p>
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Ошибка!</strong> Пожалуйста, исправьте ошибки ниже.
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_username" class="form-label" style="color: #e4e4e7;">
+                                    <i class="bi bi-person-fill me-2"></i>Имя пользователя *
+                                </label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.username.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text" style="color: #ffffff; font-weight: 500;">Только буквы, цифры и @/./+/-/_</div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label" style="color: #e4e4e7;">
+                                    <i class="bi bi-envelope-fill me-2"></i>Email *
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.email.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label" style="color: #e4e4e7;">
+                                    <i class="bi bi-person-badge me-2"></i>Имя
+                                </label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label" style="color: #e4e4e7;">
+                                    <i class="bi bi-person-badge-fill me-2"></i>Фамилия
+                                </label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_phone" class="form-label" style="color: #e4e4e7;">
+                                <i class="bi bi-telephone-fill me-2"></i>Телефон
+                            </label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
+                            {% endif %}
+                            <div class="form-text" style="color: #ffffff; font-weight: 500;">Формат: +7 (XXX) XXX-XX-XX</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label" style="color: #e4e4e7;">
+                                <i class="bi bi-lock-fill me-2"></i>Пароль *
+                            </label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password1.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text" style="color: #ffffff; font-weight: 500;">
+                                Минимум 8 символов. Не должен быть слишком простым.
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_password2" class="form-label" style="color: #e4e4e7;">
+                                <i class="bi bi-lock-fill me-2"></i>Подтверждение пароля *
+                            </label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for error in form.password2.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-lg" style="background: #FF6B35; color: white; border-radius: 8px; font-weight: 600; padding: 12px;">
+                                <i class="bi bi-person-plus-fill me-2"></i>Зарегистрироваться
+                            </button>
+                            <a href="{% url 'core:index' %}" class="btn btn-outline-light" style="border-radius: 8px;">
+                                <i class="bi bi-arrow-left me-2"></i>На главную
+                            </a>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p style="color: rgba(228, 228, 231, 0.7);">
+                            Уже есть аккаунт? 
+                            <a href="{% url 'core:login' %}" style="color: #FF6B35; text-decoration: none; font-weight: 600;">
+                                Войти
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

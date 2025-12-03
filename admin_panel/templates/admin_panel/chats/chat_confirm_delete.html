@@ -1,0 +1,37 @@
+{% extends 'admin_panel/chats/base_chat.html' %}
+
+{% block title %}Удаление чата{% endblock %}
+
+{% block chat_content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Подтверждение удаления
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>Вы уверены, что хотите удалить чат с <strong>{{ chat.get_participant_name }}</strong>?</p>
+                <p class="text-muted small">Контакт: {{ chat.get_participant_contact }}</p>
+                <p class="text-danger">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    Это действие нельзя отменить. Все сообщения будут безвозвратно удалены.
+                </p>
+                
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-2"></i>Да, удалить
+                        </button>
+                        <a href="{% url 'admin_panel:admin_chat_view' chat.id %}" class="btn btn-secondary">
+                            <i class="bi bi-x-lg me-2"></i>Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

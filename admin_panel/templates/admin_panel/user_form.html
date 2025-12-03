@@ -1,0 +1,126 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Редактировать пользователя{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Редактировать пользователя</h1>
+    <a href="{% url 'admin_panel:user_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Назад
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.username.label }}</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.first_name.label }}</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.last_name.label }}</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Права доступа</label>
+                            <div class="form-check">
+                                {{ form.is_active }}
+                                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                    {{ form.is_active.label }}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                {{ form.is_staff }}
+                                <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
+                                    {{ form.is_staff.label }}
+                                </label>
+                            </div>
+                            {% if form.is_active.errors %}
+                                <div class="text-danger small mt-1">{{ form.is_active.errors }}</div>
+                            {% endif %}
+                            {% if form.is_staff.errors %}
+                                <div class="text-danger small mt-1">{{ form.is_staff.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Сохранить
+                        </button>
+                        <a href="{% url 'admin_panel:user_list' %}" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0">Информация о пользователе</h6>
+            </div>
+            <div class="card-body">
+                <p class="mb-2"><strong>ID:</strong> {{ form.instance.id }}</p>
+                <p class="mb-2"><strong>Дата регистрации:</strong> {{ form.instance.date_joined|date:"d.m.Y H:i" }}</p>
+                <p class="mb-2"><strong>Последний вход:</strong> {{ form.instance.last_login|date:"d.m.Y H:i"|default:"Никогда" }}</p>
+                {% if form.instance.is_superuser %}
+                <div class="alert alert-warning mb-0 mt-3">
+                    <i class="bi bi-shield-lock me-2"></i>
+                    Суперадминистратор
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header bg-white">
+                <h6 class="mb-0">Подсказки</h6>
+            </div>
+            <div class="card-body">
+                <ul class="small mb-0">
+                    <li class="mb-2"><strong>Активен</strong> — может входить в систему</li>
+                    <li><strong>Персонал</strong> — доступ к админ-панели</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

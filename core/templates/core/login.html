@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg" style="border: none; border-radius: 16px; background: #2a2a2e;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-box-seam" style="font-size: 4rem; color: #FF6B35;"></i>
+                        <h2 class="mt-3" style="color: #e4e4e7;">Вход в систему</h2>
+                        <p style="color: rgba(228, 228, 231, 0.7);">Введите ваши учетные данные</p>
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Неверное имя пользователя или пароль
+                    </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label" style="color: #e4e4e7;">
+                                <i class="bi bi-person-fill me-2"></i>Имя пользователя
+                            </label>
+                            <input type="text" name="username" class="form-control" id="id_username" required 
+                                   style="background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;">
+                        </div>
+                        <div class="mb-4">
+                            <label for="id_password" class="form-label" style="color: #e4e4e7;">
+                                <i class="bi bi-lock-fill me-2"></i>Пароль
+                            </label>
+                            <input type="password" name="password" class="form-control" id="id_password" required
+                                   style="background: #1e1e22; border-color: #3a3a40; color: #e4e4e7; border-radius: 8px; padding: 12px;">
+                        </div>
+                        
+                        <input type="hidden" name="next" value="{{ next }}">
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-lg" style="background: #FF6B35; color: white; border-radius: 8px; font-weight: 600; padding: 12px;">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                            </button>
+                            <a href="{% url 'core:index' %}" class="btn btn-outline-light" style="border-radius: 8px;">
+                                <i class="bi bi-arrow-left me-2"></i>На главную
+                            </a>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p style="color: rgba(228, 228, 231, 0.7);">
+                            Нет аккаунта? 
+                            <a href="{% url 'core:register' %}" style="color: #FF6B35; text-decoration: none; font-weight: 600;">
+                                Зарегистрироваться
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

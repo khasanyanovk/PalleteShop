@@ -1,0 +1,66 @@
+services:
+
+  caddy:
+    image: caddy:latest
+    container_name: pallete_shop_caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - pallete_shop_static_volume:/app/staticfiles:ro
+      - pallete_shop_media_volume:/app/media:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - pallete_shop_caddy_data:/data:rw
+      - pallete_shop_caddy_config:/config:rw
+    networks:
+      - pallete_shop_network
+    restart: unless-stopped
+  db:
+    image: postgres:15-alpine
+    container_name: pallete_shop_db
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+    volumes:
+      - pallete_shop_postgres_data:/var/lib/postgresql/data
+    networks:
+      - pallete_shop_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  web:
+    build: .
+    container_name: pallete_shop_web
+    env_file:
+      - .env
+    command: gunicorn pallete_shop.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    volumes:
+      - pallete_shop_static_volume:/app/staticfiles:rw
+      - pallete_shop_media_volume:/app/media:rw
+    ports:
+      - "8000:8000"
+    networks:
+      - pallete_shop_network
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+
+volumes:
+  pallete_shop_postgres_data:
+  pallete_shop_static_volume:
+  pallete_shop_media_volume:
+  pallete_shop_caddy_data:
+  pallete_shop_caddy_config:
+
+networks:
+  pallete_shop_network:
+    driver: bridge

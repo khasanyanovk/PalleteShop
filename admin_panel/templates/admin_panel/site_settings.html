@@ -1,0 +1,166 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Настройки сайта{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Настройки сайта</h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-gear me-2"></i>Контактная информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.phone.label }}</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Формат: +7 (XXX) XXX-XX-XX</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Email для связи с клиентами</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.address.label }}</label>
+                        {{ form.address }}
+                        {% if form.address.errors %}
+                            <div class="text-danger small mt-1">{{ form.address.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Адрес для отображения в футере</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.address_link.label }}</label>
+                        {{ form.address_link }}
+                        {% if form.address_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.address_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Ссылка на Google Maps или Яндекс.Карты</div>
+                    </div>
+
+                    <hr class="my-4">
+                    <h6 class="mb-3">Режим работы</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.working_hours_weekdays.label }}</label>
+                        {{ form.working_hours_weekdays }}
+                        {% if form.working_hours_weekdays.errors %}
+                            <div class="text-danger small mt-1">{{ form.working_hours_weekdays.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Например: 9:00 - 18:00</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.working_hours_saturday.label }}</label>
+                        {{ form.working_hours_saturday }}
+                        {% if form.working_hours_saturday.errors %}
+                            <div class="text-danger small mt-1">{{ form.working_hours_saturday.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Например: 10:00 - 16:00</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.working_hours_sunday.label }}</label>
+                        {{ form.working_hours_sunday }}
+                        {% if form.working_hours_sunday.errors %}
+                            <div class="text-danger small mt-1">{{ form.working_hours_sunday.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Например: Выходной или 11:00 - 15:00</div>
+                    </div>
+
+                    <hr class="my-4">
+                    <h6 class="mb-3">Социальные сети</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.vk_link.label }}</label>
+                        {{ form.vk_link }}
+                        {% if form.vk_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.vk_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Полная ссылка на страницу ВКонтакте (например: https://vk.com/your_page)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.telegram_link.label }}</label>
+                        {{ form.telegram_link }}
+                        {% if form.telegram_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.telegram_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Полная ссылка на Telegram (например: https://t.me/your_channel)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.avito_link.label }}</label>
+                        {{ form.avito_link }}
+                        {% if form.avito_link.errors %}
+                            <div class="text-danger small mt-1">{{ form.avito_link.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Полная ссылка на профиль на Avito (например: https://www.avito.ru/user/...)</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h6 class="mb-0">Предпросмотр</h6>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">
+                    <i class="bi bi-telephone text-primary me-2"></i>
+                    <strong>{{ settings.phone }}</strong>
+                </p>
+                <p class="mb-2">
+                    <i class="bi bi-envelope text-primary me-2"></i>
+                    {{ settings.email }}
+                </p>
+                <p class="mb-0">
+                    <i class="bi bi-geo-alt text-primary me-2"></i>
+                    {% if settings.address_link %}
+                        <a href="{{ settings.address_link }}" target="_blank">{{ settings.address }}</a>
+                    {% else %}
+                        {{ settings.address }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header bg-white">
+                <h6 class="mb-0">Информация</h6>
+            </div>
+            <div class="card-body">
+                <p class="small mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Эти данные отображаются в футере сайта и доступны всем посетителям
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
