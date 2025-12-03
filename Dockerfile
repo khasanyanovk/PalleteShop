@@ -10,20 +10,19 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     gettext \
     netcat-traditional \
+    dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
-
 COPY . /app/
 
-RUN mkdir -p /app/staticfiles /app/media
+RUN dos2unix /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
 
-RUN python manage.py collectstatic --noinput
+RUN mkdir -p /app/staticfiles /app/media
 
 EXPOSE 8000
 
