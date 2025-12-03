@@ -13,10 +13,10 @@
                 </p>
             </div>
 
-            {% if site_settings.vk_link or site_settings.telegram_link or site_settings.avito_link %}
+            {% if site_settings.vk_link or site_settings.telegram_link or site_settings.avito_link or site_settings.whatsapp_link %}
             <div class="col-md-2 mb-4">
                 <h5 class="fw-bold mb-3" style="color: #FF6B35;">Мы в соцсетях</h5>
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-2 flex-wrap">
                     {% if site_settings.vk_link %}
                     <a href="{{ site_settings.vk_link }}" target="_blank" class="social-icon" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(0, 119, 255, 0.1); border: 2px solid #0077FF; border-radius: 50%; color: #0077FF; font-size: 1rem; text-decoration: none; transition: all 0.3s ease;" 
                        onmouseover="this.style.background='#0077FF'; this.style.color='white'; this.style.transform='scale(1.1) rotate(5deg)';" 
@@ -42,6 +42,13 @@
                             <circle cx="9.5" cy="12" r="1.8" fill="#1e1e22"/>
                             <circle cx="14.5" cy="12" r="1.8" fill="#1e1e22"/>
                         </svg>
+                    </a>
+                    {% endif %}
+                    {% if site_settings.whatsapp_link %}
+                    <a href="{{ site_settings.whatsapp_link }}" target="_blank" class="social-icon" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(37, 211, 102, 0.1); border: 2px solid #25D366; border-radius: 50%; color: #25D366; font-size: 1.2rem; text-decoration: none; transition: all 0.3s ease;" 
+                       onmouseover="this.style.background='#25D366'; this.style.color='white'; this.style.transform='scale(1.1) rotate(-5deg)';" 
+                       onmouseout="this.style.background='rgba(37, 211, 102, 0.1)'; this.style.color='#25D366'; this.style.transform='scale(1) rotate(0deg)';">
+                        <i class="bi bi-whatsapp"></i>
                     </a>
                     {% endif %}
                 </div>

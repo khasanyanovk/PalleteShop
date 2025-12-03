@@ -52,6 +52,12 @@ class SiteSettings(models.Model):
         null=True,
         help_text="Полная ссылка на профиль на Avito",
     )
+    whatsapp_link = models.URLField(
+        verbose_name="Ссылка на WhatsApp",
+        blank=True,
+        null=True,
+        help_text="Полная ссылка на WhatsApp (например, https://wa.me/79991234567)",
+    )
 
     class Meta:
         verbose_name = "Настройки сайта"
